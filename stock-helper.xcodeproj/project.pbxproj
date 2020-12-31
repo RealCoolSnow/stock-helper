@@ -11,6 +11,8 @@
 		7638DFFD259DC08A0042D9AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7638DFFC259DC08A0042D9AC /* ContentView.swift */; };
 		7638DFFF259DC08B0042D9AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7638DFFE259DC08B0042D9AC /* Assets.xcassets */; };
 		7638E002259DC08B0042D9AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7638E001259DC08B0042D9AC /* Preview Assets.xcassets */; };
+		7638E011259DCF090042D9AC /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 7638E010259DCF090042D9AC /* Podfile */; };
+		76B58AE2259DD3F8002656F5 /* StockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B58AE1259DD3F8002656F5 /* StockInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,8 @@
 		7638E001259DC08B0042D9AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7638E003259DC08B0042D9AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7638E004259DC08B0042D9AC /* stock_helper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = stock_helper.entitlements; sourceTree = "<group>"; };
+		7638E010259DCF090042D9AC /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		76B58AE1259DD3F8002656F5 /* StockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +41,7 @@
 		7638DFEE259DC08A0042D9AC = {
 			isa = PBXGroup;
 			children = (
+				7638E010259DCF090042D9AC /* Podfile */,
 				7638DFF9259DC08A0042D9AC /* stock-helper */,
 				7638DFF8259DC08A0042D9AC /* Products */,
 			);
@@ -59,6 +64,7 @@
 				7638E003259DC08B0042D9AC /* Info.plist */,
 				7638E004259DC08B0042D9AC /* stock_helper.entitlements */,
 				7638E000259DC08B0042D9AC /* Preview Content */,
+				76B58AE1259DD3F8002656F5 /* StockInfo.swift */,
 			);
 			path = "stock-helper";
 			sourceTree = "<group>";
@@ -129,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7638E002259DC08B0042D9AC /* Preview Assets.xcassets in Resources */,
+				7638E011259DCF090042D9AC /* Podfile in Resources */,
 				7638DFFF259DC08B0042D9AC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76B58AE2259DD3F8002656F5 /* StockInfo.swift in Sources */,
 				7638DFFD259DC08A0042D9AC /* ContentView.swift in Sources */,
 				7638DFFB259DC08A0042D9AC /* stock_helperApp.swift in Sources */,
 			);
