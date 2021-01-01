@@ -4,7 +4,7 @@ const { app, BrowserWindow, globalShortcut, protocol } = require('electron')
 const WindowStateKeeper = require('electron-window-state')
 
 const isDev = !app.isPackaged
-const isDevTools = true
+const isDevTools = isDev
 const loadTryTimes = 10
 
 let mainWindow
@@ -56,7 +56,7 @@ function createWindow(windowName = 'main', options = {}) {
 
 async function createMainWindow() {
   mainWindow = createWindow('main', {
-    icon: 'public/logo.ico',
+    icon: 'public/icon.ico',
     webPreferences: {
       // 取消跨域限制
       webSecurity: false,
@@ -69,12 +69,12 @@ async function createMainWindow() {
   const port = process.env.PORT || 3000
   const url = isDev
     ? `http://localhost:${port}`
-    : path.join(__dirname, '../dist/index.html')
+    : `file://${__dirname}/../dist/index.html`
 
   let t = loadTryTimes
   const loadUrl = () => {
     mainWindow.loadURL(url).catch(() => {
-      if (t-- > 0) setTimeout(loadUrl, 500)
+      if (isDev && t-- > 0) setTimeout(loadUrl, 500)
     })
   }
   loadUrl()

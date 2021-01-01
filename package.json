@@ -51,7 +51,8 @@
   },
   "main": "src/background.js",
   "build": {
-    "appId": "app.quickstart",
+    "productName": "stockhelper",
+    "appId": "app.coolsnow.stockhelper",
     "directories": {
       "output": "build"
     },
@@ -63,10 +64,11 @@
       "allowElevation": false
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "./public/icon.icns"
     },
     "win": {
-      "icon": "./public/logo.ico",
+      "icon": "./public/icon.ico",
       "target": [
         {
           "target": "nsis",
@@ -79,8 +81,7 @@
     "files": [
       "src/background.js",
       "dist",
-      "tailwind.config.js",
-      "src/assets/"
+      "tailwind.config.js"
     ]
   },
   "prettier": {
