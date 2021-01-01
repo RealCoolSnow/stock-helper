@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path')
-const { app, BrowserWindow, globalShortcut, protocol } = require('electron')
+const { app, BrowserWindow, globalShortcut, protocol, Tray, nativeImage } = require('electron')
 const WindowStateKeeper = require('electron-window-state')
-
+const stock = require('./utils/stock.js')
 const isDev = !app.isPackaged
 const isDevTools = isDev
+const isMac = process.platform === 'darwin'
 const loadTryTimes = 10
 
 let mainWindow
@@ -85,6 +85,7 @@ async function createMainWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createMainWindow()
+  createTray()
 })
 
 // On macOS it's common to re-create a window in the app when the
@@ -102,7 +103,7 @@ app.on('activate', () => {
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') app.quit()
+  if (!isMac) app.quit()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -111,9 +112,31 @@ if (isDev) {
     process.on('message', (data) => {
       if (data === 'graceful-exit') app.quit()
     })
-  } else {
+  }
+  else {
     process.on('SIGTERM', () => {
       app.quit()
     })
   }
+}
+
+/** functions */
+
+let tray = null
+const trayIconPath = 'public/tray/icon.png'
+const createTray = () => {
+  const image = nativeImage.createFromPath(trayIconPath)
+  tray = new Tray(image)
+  tray.on('click', () => {
+    if (mainWindow)
+      mainWindow.show()
+  })
+  if (isMac)
+    tray.setTitle('hello tray')
+  // 开启定时器
+  startTimer()
+}
+
+const startTimer = () => {
+  stock.getStockInfo('sh600360')
 }
