@@ -12,9 +12,12 @@
   <h1 @click="showAbout">
     {{ t('app_name') }}
   </h1>
-  <button class="border-2 px-1 m-2 text-red-400" @click="inc">
+  <!-- <button class="border-2 px-1 m-2 text-red-400" @click="inc">
     counter - {{ counter }}
-  </button>
+  </button> -->
+  <van-button type="info" class="border-2 px-1 m-2 text-red-400" @click="inc">
+    counter - {{ counter }}
+  </van-button>
   <button class="border-2 px-1 m-2 text-blue-400" @click="mockTest">
     mock test
   </button>

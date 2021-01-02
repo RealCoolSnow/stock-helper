@@ -16,14 +16,14 @@ protocol.registerSchemesAsPrivileged([
 
 function createWindow(windowName = 'main', options = {}) {
   const winOptions = {
-    minWidth: 800,
-    minHeight: 600,
+    // minWidth: 800,
+    // minHeight: 600,
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
-    trafficLightPosition: {
-      x: 20,
-      y: 32,
-    },
+    // trafficLightPosition: {
+    //   x: 20,
+    //   y: 32,
+    // },
     ...options,
     webPreferences: {
       devTools: isDevTools,
