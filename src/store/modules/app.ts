@@ -7,7 +7,7 @@ import MutationTypes from '../mutation-types'
 const app = {
   state: {
     counter: 0,
-    language: sessionStorage.getItem('language') || 'en',
+    language: sessionStorage.getItem('language') || 'zh-CN',
   },
   mutations: {
     [MutationTypes.APP.SET_LANGUAGE]: (state: any, language: string) => {

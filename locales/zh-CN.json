@@ -1,6 +1,7 @@
 {
-    "app_name": "Vue3 Quick Start",
-    "home": "首页",
+    "app_name": "Stock Helper",
+    "stock": "股票",
+    "setting": "设置",
     "about": "关于",
-    "about_msg": "这是关于页面"
+    "tray_show_stock": "托盘显示股票信息"
 }

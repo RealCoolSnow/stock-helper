@@ -16,8 +16,8 @@ protocol.registerSchemesAsPrivileged([
 
 function createWindow(windowName = 'main', options = {}) {
   const winOptions = {
-    // minWidth: 800,
-    // minHeight: 600,
+    minWidth: 400,
+    minHeight: 600,
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     // trafficLightPosition: {
@@ -78,6 +78,9 @@ async function createMainWindow() {
     })
   }
   loadUrl()
+
+  if (isDevTools)
+    mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

@@ -8,6 +8,12 @@ const routes: Array<any> = [
     component: Home,
   },
   {
+    path: '/setting',
+    name: 'setting',
+    component: () =>
+      import(/* webpackChunkName: "setting" */ '/@/pages/Setting.vue'),
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting

@@ -1,17 +1,28 @@
 <template>
-  <div class="px-4 py-10 text-center text-gray-700 dark:text-gray-200">
+  <div class="py-10 bg-gray-100 h-screen">
     <router-view />
   </div>
+  <van-tabbar v-model="state.tabSelected" active-color="#1296db" inactive-color="#000" route>
+    <van-tabbar-item to="/" icon="home-o">
+      {{ t('stock') }}
+    </van-tabbar-item>
+    <van-tabbar-item to="/setting" icon="setting-o">
+      {{ t('setting') }}
+    </van-tabbar-item>
+  </van-tabbar>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineComponent, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup() {
     console.log('app created')
-    const router = useRouter()
-    router.push('/')
+    const { t } = useI18n()
+    const state = reactive({
+      tabSelected: 0,
+    })
+    return { t, state }
   },
 })
 </script>
