@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { Config } from './utils/config.ts'
 const { app, BrowserWindow, globalShortcut, protocol, Tray, nativeImage } = require('electron')
 const WindowStateKeeper = require('electron-window-state')
 const stock = require('./utils/stock.js')
-const isDev = !app.isPackaged
-const isDevTools = isDev
 const isMac = process.platform === 'darwin'
 const loadTryTimes = 10
-
+let isDev = !app.isPackaged
+let isDevTools = isDev
 let mainWindow
 
 // Scheme must be registered before the app is ready
@@ -55,11 +55,13 @@ function createWindow(windowName = 'main', options = {}) {
 }
 
 async function createMainWindow() {
+  loadConfig()
   mainWindow = createWindow('main', {
     icon: 'public/icon.ico',
     webPreferences: {
       // 取消跨域限制
       webSecurity: false,
+      enableRemoteModule: true,
     },
     // backgroundColor: fullTailwindConfig.theme.colors.primary[800],
   })
@@ -142,4 +144,12 @@ const createTray = () => {
 
 const startTimer = () => {
   stock.getStockInfo('sh600360')
+}
+
+const loadConfig = () => {
+  const debug = Config.getInstance().isDebug()
+  if (debug) {
+    isDev = true
+    isDevTools = true
+  }
 }
