@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stock_helper/config/config.dart';
+import 'package:stock_helper/locale/i18n.dart';
+import 'package:stock_helper/locale/locale_util.dart';
 import 'package:stock_helper/ui/app_theme.dart';
 import 'package:stock_helper/ui/pages/home.dart';
 
@@ -17,7 +20,13 @@ class _AppState extends State<App> {
         primarySwatch: AppTheme.primary,
         splashColor: AppTheme.splash,
       ),
-      home: HomePage(title: Config.app),
+      localizationsDelegates: [
+        const I18nDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: localeUtil.supportedLocales(),
+      home: HomePage(),
     );
     return app;
   }
