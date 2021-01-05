@@ -2,22 +2,38 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_info.dart';
+import 'package:stock_helper/config/config.dart';
+import 'package:stock_helper/config/route/routes.dart';
+import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 
-class StockList extends StatefulWidget {
+class StockListPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _StockListState();
+  State<StatefulWidget> createState() => _StockListPageState();
 }
 
-class _StockListState extends State<StockList> {
+class _StockListPageState extends State<StockListPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: this._getStockList(),
-      ),
-    );
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text(I18n.of(context).text("app_name")),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings),
+              tooltip: I18n.of(context).text("setting"),
+              onPressed: () =>
+                  Config.router.navigateTo(context, Routes.setting),
+            ),
+          ],
+        ),
+        floatingActionButton: _buildActionButton(),
+        body: Container(
+          child: ListView(
+            children: this._getStockList(),
+          ),
+        ));
   }
 
   List<Widget> _getStockList() {
@@ -34,6 +50,18 @@ class _StockListState extends State<StockList> {
     return stocklist.map((item) {
       return StockItem(item);
     }).toList();
+  }
+
+  Widget _buildActionButton() {
+    return FloatingActionButton(
+      onPressed: _addStock,
+      tooltip: I18n.of(context).text("add_stock"),
+      child: Icon(Icons.add),
+    );
+  }
+
+  void _addStock() {
+    logUtil.d("_addStock");
   }
 }
 

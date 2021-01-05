@@ -1,10 +1,9 @@
 {
-    "app_name": "Stock Helper",
-    "about": "About",
-    "ok": "OK",
-    "refresh": "Refresh",
-    "copy_link": "Copy Link",
-    "copied": "Copied",
-    "loading": "loading...",
-    "add_stock": "Add Stock"
+  "app_name": "Stock Helper",
+  "about": "About",
+  "ok": "OK",
+  "refresh": "Refresh",
+  "loading": "loading...",
+  "add_stock": "Add Stock",
+  "setting": "Setting"
 }

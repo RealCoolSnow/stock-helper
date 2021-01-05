@@ -9,6 +9,7 @@ import 'package:stock_helper/locale/locale_util.dart';
 import 'package:stock_helper/storage/Pref.dart';
 import 'package:stock_helper/ui/app_theme.dart';
 import 'package:stock_helper/ui/pages/home.dart';
+import 'package:stock_helper/ui/pages/stock_list.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/time_util.dart';
 
@@ -45,7 +46,7 @@ class _AppState extends State<App> {
       ],
       supportedLocales: localeUtil.supportedLocales(),
       onGenerateRoute: Config.router.generator,
-      home: HomePage(),
+      home: StockListPage(),
     );
     return app;
   }

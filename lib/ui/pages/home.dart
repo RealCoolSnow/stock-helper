@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_helper/locale/i18n.dart';
-import 'package:stock_helper/ui/pages/home/setting.dart';
-import 'package:stock_helper/ui/pages/home/stock_list.dart';
+import 'package:stock_helper/ui/pages/home/setting_tab.dart';
+import 'package:stock_helper/ui/pages/home/stock_list_tab.dart';
 import 'package:stock_helper/util/log_util.dart';
 
 const int TAB_LENGTH = 2;
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage>
     return TabBarView(
         physics: NeverScrollableScrollPhysics(), //禁止滑动切换
         controller: _tabController,
-        children: [StockList(), Setting()]);
+        children: [StockListTab(), SettingTab()]);
   }
 
   Widget _buildActionButton() {

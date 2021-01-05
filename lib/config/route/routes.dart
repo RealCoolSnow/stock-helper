@@ -16,6 +16,8 @@ import 'package:stock_helper/config/route/route_handlers.dart';
 ///
 class Routes {
   static const String home = "/";
+  static const String setting = "/setting";
+  static const String stock_list = "/stock_list";
   static const String about = "/about";
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = Handler(
@@ -23,6 +25,8 @@ class Routes {
       print("ROUTE WAS NOT FOUND !!!");
     });
     router.define(home, handler: homeHandler);
+    router.define(setting, handler: settingHandler);
+    router.define(stock_list, handler: stockListHandler);
     router.define(about,
         handler: aboutHandler, transitionType: TransitionType.fadeIn);
   }

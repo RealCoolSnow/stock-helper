@@ -4,12 +4,12 @@ import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
 
-class Setting extends StatefulWidget {
+class SettingTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _SettingState();
+  State<StatefulWidget> createState() => _SettingTabState();
 }
 
-class _SettingState extends State<Setting> {
+class _SettingTabState extends State<SettingTab> {
   @override
   Widget build(BuildContext context) {
     return Center(
