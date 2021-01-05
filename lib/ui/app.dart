@@ -1,7 +1,9 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/pref_key.dart';
+import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/locale/locale_util.dart';
 import 'package:stock_helper/storage/Pref.dart';
@@ -16,6 +18,10 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   _AppState() {
+    //---router
+    final router = FluroRouter();
+    Routes.configureRoutes(router);
+    Config.router = router;
     //---shared preferences
     Pref.setString(PrefKey.launchTime, TimeUtil.format(DateTime.now()));
     //---logutil
@@ -38,6 +44,7 @@ class _AppState extends State<App> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: localeUtil.supportedLocales(),
+      onGenerateRoute: Config.router.generator,
       home: HomePage(),
     );
     return app;
