@@ -3,14 +3,18 @@ class StockInfo {
   String name;
   double price;
   double priceOpen;
+  double priceClose;
 
-  StockInfo({this.code, this.name, this.price, this.priceOpen});
+  StockInfo(Map<dynamic, String> map,
+      {this.code, this.name, this.price, this.priceOpen, this.priceClose});
 
   StockInfo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     name = json['name'];
     price = json['price'];
     priceOpen = json['price_open'];
+    priceClose = json['price_close'];
+    ;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +23,7 @@ class StockInfo {
     data['name'] = this.name;
     data['price'] = this.price;
     data['price_open'] = this.priceOpen;
+    data['price_close'] = this.priceClose;
     return data;
   }
 }

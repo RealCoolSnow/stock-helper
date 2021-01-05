@@ -64,7 +64,9 @@ class _HomePageState extends State<HomePage>
 
   Widget _buildBody() {
     return TabBarView(
-        controller: _tabController, children: [StockList(), Setting()]);
+        physics: NeverScrollableScrollPhysics(), //禁止滑动切换
+        controller: _tabController,
+        children: [StockList(), Setting()]);
   }
 
   Widget _buildActionButton() {

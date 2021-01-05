@@ -31,9 +31,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   # route - https://github.com/theyakka/fluro
   fluro: ^1.7.6
-    # logger - https://github.com/leisim/logger
+  # logger - https://github.com/leisim/logger
   logger: ^0.9.2
-  
+  # flustars - https://pub.flutter-io.cn/packages/common_utils
+  flustars: ^0.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

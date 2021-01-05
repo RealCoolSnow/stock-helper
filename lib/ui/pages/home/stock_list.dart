@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_info.dart';
+import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 
 class StockList extends StatefulWidget {
@@ -42,15 +43,36 @@ class StockItem extends StatelessWidget {
   final StockInfo stockInfo;
   @override
   Widget build(BuildContext context) {
+    String percent = FormatUtil.get2FixedNumber(
+        (this.stockInfo.price - this.stockInfo.priceOpen) /
+            this.stockInfo.priceOpen *
+            100);
     return ListTile(
+      dense: true,
       title: Text(this.stockInfo.name),
       subtitle: Text(this.stockInfo.code),
-      trailing: Text(
-        '${this.stockInfo.price}',
-        style: TextStyle(
-            color: this.stockInfo.price > this.stockInfo.priceOpen
-                ? Colors.red
-                : Colors.green),
+      trailing: Container(
+        width: 200,
+        child: Row(
+          children: [
+            Text(
+              '${this.stockInfo.price}',
+              style: TextStyle(
+                  color: this.stockInfo.price > this.stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+            Text(
+              '$percent%',
+              style: TextStyle(
+                  color: this.stockInfo.price > this.stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+        ),
       ),
     );
   }
