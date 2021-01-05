@@ -5,8 +5,51 @@ import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
+import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
+import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
+
+class StockItem extends StatelessWidget {
+  StockItem(this.stockInfo);
+
+  final StockInfo stockInfo;
+  @override
+  Widget build(BuildContext context) {
+    String percent = FormatUtil.get2FixedNumber(
+        (this.stockInfo.price - this.stockInfo.priceOpen) /
+            this.stockInfo.priceOpen *
+            100);
+    return ListTile(
+      dense: true,
+      title: Text(this.stockInfo.name),
+      subtitle: Text(this.stockInfo.code),
+      trailing: Container(
+        width: 200,
+        child: Row(
+          children: [
+            Text(
+              '${this.stockInfo.price}',
+              style: TextStyle(
+                  color: this.stockInfo.price > this.stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+            Text(
+              '$percent%',
+              style: TextStyle(
+                  color: this.stockInfo.price > this.stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+        ),
+      ),
+    );
+  }
+}
 
 class StockListPage extends StatefulWidget {
   @override
@@ -62,46 +105,22 @@ class _StockListPageState extends State<StockListPage> {
 
   void _addStock() {
     logUtil.d("_addStock");
+    _testDatabase();
   }
-}
 
-class StockItem extends StatelessWidget {
-  StockItem(this.stockInfo);
-
-  final StockInfo stockInfo;
-  @override
-  Widget build(BuildContext context) {
-    String percent = FormatUtil.get2FixedNumber(
-        (this.stockInfo.price - this.stockInfo.priceOpen) /
-            this.stockInfo.priceOpen *
-            100);
-    return ListTile(
-      dense: true,
-      title: Text(this.stockInfo.name),
-      subtitle: Text(this.stockInfo.code),
-      trailing: Container(
-        width: 200,
-        child: Row(
-          children: [
-            Text(
-              '${this.stockInfo.price}',
-              style: TextStyle(
-                  color: this.stockInfo.price > this.stockInfo.priceOpen
-                      ? Colors.red
-                      : Colors.green),
-            ),
-            Text(
-              '$percent%',
-              style: TextStyle(
-                  color: this.stockInfo.price > this.stockInfo.priceOpen
-                      ? Colors.red
-                      : Colors.green),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-        ),
-      ),
-    );
+  void _testDatabase() {
+    var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
+    //插入
+    // var map = {'code': '601360', 'name': '三六零'};
+    // sql.insert(map).then((id) {
+    //   logUtil.d('insert $id');
+    // });
+    //删除
+    sql.delete('id', 1);
+    //查询
+    var conditions = {};
+    sql
+        .query(conditions: conditions)
+        .then((value) => logUtil.d('result $value'));
   }
 }

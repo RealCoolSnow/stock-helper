@@ -139,7 +139,6 @@ class SqlUtil extends BaseModel {
       }
       index++;
     });
-    // print("this is string condition for sql > $stringConditions");
     return await this.querys(tableName, where: stringConditions);
   }
 }

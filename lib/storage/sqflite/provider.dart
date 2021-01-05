@@ -4,7 +4,7 @@ import 'package:stock_helper/util/log_util.dart';
 import 'package:path/path.dart';
 
 class Provider {
-  final String dbName = "app.db";
+  static const String DB_NAME = "app.db";
   static Database db;
   Future<List> getTables() async {
     if (db == null) {
@@ -21,7 +21,7 @@ class Provider {
 
   // 检查数据库中, 表是否完整, 在部份android中, 会出现表丢失的情况
   Future checkTableIsRight() async {
-    List<String> expectTables = ['stocks']; //将项目中使用的表的表名添加集合中
+    List<String> expectTables = SqlTable.TABLES; //将项目中使用的表的表名添加集合中
 
     List<String> tables = await getTables();
 
@@ -37,7 +37,7 @@ class Provider {
   Future init() async {
     //Get a location using getDatabasesPath
     String databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, dbName);
+    String path = join(databasesPath, DB_NAME);
     print(path);
     try {
       db = await openDatabase(path);
