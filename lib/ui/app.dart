@@ -7,6 +7,7 @@ import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/locale/locale_util.dart';
 import 'package:stock_helper/storage/Pref.dart';
+import 'package:stock_helper/storage/sqflite/provider.dart';
 import 'package:stock_helper/ui/app_theme.dart';
 import 'package:stock_helper/ui/pages/home.dart';
 import 'package:stock_helper/ui/pages/stock_list.dart';
@@ -25,6 +26,8 @@ class _AppState extends State<App> {
     Config.router = router;
     //---shared preferences
     Pref.setString(PrefKey.launchTime, TimeUtil.format(DateTime.now()));
+    //---sqflite
+    Provider().init();
     //---logutil
     logUtil.setEnabled(Config.debug);
     Pref.getString(PrefKey.launchTime)
