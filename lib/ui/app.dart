@@ -5,12 +5,18 @@ import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/locale/locale_util.dart';
 import 'package:stock_helper/ui/app_theme.dart';
 import 'package:stock_helper/ui/pages/home.dart';
+import 'package:stock_helper/util/log_util.dart';
 
 class App extends StatefulWidget {
   _AppState createState() => new _AppState();
 }
 
 class _AppState extends State<App> {
+  _AppState() {
+    //---logutil
+    logUtil.setEnabled(Config.debug);
+    logUtil.d("App created");
+  }
   @override
   Widget build(BuildContext context) {
     final app = MaterialApp(

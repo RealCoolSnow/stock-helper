@@ -120,6 +120,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.0.0-nullsafety.4"
+  fluro:
+    dependency: "direct main"
+    description:
+      name: fluro
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.8"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -185,6 +192,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.2"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.9.4"
   logging:
     dependency: transitive
     description:
@@ -395,3 +409,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/ui/pages/home/setting.dart';
 import 'package:stock_helper/ui/pages/home/stock_list.dart';
+import 'package:stock_helper/util/log_util.dart';
 
 const int TAB_LENGTH = 2;
 
@@ -77,6 +78,6 @@ class _HomePageState extends State<HomePage>
   }
 
   void _addStock() {
-    print('_addStock');
+    logUtil.d("_addStock");
   }
 }
