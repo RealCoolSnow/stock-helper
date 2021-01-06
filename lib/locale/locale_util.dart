@@ -11,7 +11,7 @@ typedef void LocaleChangeCallback(Locale locale);
 
 class LocaleUtil {
   /// Support languages list
-  final List<String> supportedLanguages = ['en', 'zh'];
+  final List<String> supportedLanguages = [/*'en',*/ 'zh'];
 
   /// Support Locales list
   Iterable<Locale> supportedLocales() =>

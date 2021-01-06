@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:stock_helper/bean/stock_item.dart';
+import 'package:stock_helper/util/log_util.dart';
+import 'package:stock_helper/util/stock_util.dart';
 
 class StockSearchDelegate extends SearchDelegate<String> {
+  StockSearchDelegate({
+    String hintText,
+  }) : super(
+          searchFieldLabel: hintText,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -22,20 +32,84 @@ class StockSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container(
-      width: 100.0,
-      height: 100.0,
-      child: Card(
-        color: Colors.redAccent,
-        child: Center(
-          child: Text(query),
-        ),
-      ),
+    return Center(
+      child: Text(query),
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return SizedBox.shrink();
+    return _SearchContentView(
+      query: query,
+    );
+  }
+}
+
+class _SearchContentView extends StatefulWidget {
+  final String query;
+  const _SearchContentView({Key key, this.query}) : super(key: key);
+  @override
+  _SearchContentViewState createState() => _SearchContentViewState();
+}
+
+class _SearchContentViewState extends State<_SearchContentView> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SearchItemView(
+            query: this.widget.query,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchItemView extends StatefulWidget {
+  final String query;
+  const _SearchItemView({Key key, this.query}) : super(key: key);
+  @override
+  _SearchItemViewState createState() => _SearchItemViewState();
+}
+
+class _SearchItemViewState extends State<_SearchItemView> {
+  List<StockItem> list = [];
+
+  @override
+  Widget build(BuildContext context) {
+    list = StockUtil.searchStocks(this.widget.query, maxCount: 20);
+    return Container(
+      child: Wrap(
+        // runSpacing: 0,
+        children: list.map((item) {
+          return _SearchItem(stockItem: item);
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _SearchItem extends StatefulWidget {
+  @required
+  final StockItem stockItem;
+  const _SearchItem({Key key, this.stockItem}) : super(key: key);
+  @override
+  _SearchItemState createState() => _SearchItemState();
+}
+
+class _SearchItemState extends State<_SearchItem> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      dense: true,
+      title: Text(this.widget.stockItem.name),
+      subtitle: Text(this.widget.stockItem.code),
+      onTap: () {
+        logUtil.d(this);
+      },
+    );
   }
 }

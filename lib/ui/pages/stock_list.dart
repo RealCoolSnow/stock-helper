@@ -115,7 +115,10 @@ class _StockListPageState extends State<StockListPage> {
   void _addStock() {
     logUtil.d("_addStock");
     //_testDatabase();
-    showSearch(context: context, delegate: StockSearchDelegate());
+    showSearch(
+        context: context,
+        delegate:
+            StockSearchDelegate(hintText: I18n.of(context).text('search_tip')));
   }
 
   void _testDatabase() {
