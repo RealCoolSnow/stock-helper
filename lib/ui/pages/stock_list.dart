@@ -89,8 +89,8 @@ class _StockListPageState extends State<StockListPage> {
     return ListTile(
       dense: true,
       onTap: () {},
-      title: Text(stockInfo.name),
-      subtitle: Text(stockInfo.code),
+      title: Text(stockInfo.baseInfo.name),
+      subtitle: Text(stockInfo.baseInfo.code),
       trailing: Container(
         width: 200,
         child: Row(

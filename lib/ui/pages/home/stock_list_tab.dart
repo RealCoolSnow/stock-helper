@@ -49,8 +49,8 @@ class _StockItem extends StatelessWidget {
             100);
     return ListTile(
       dense: true,
-      title: Text(this.stockInfo.name),
-      subtitle: Text(this.stockInfo.code),
+      title: Text(this.stockInfo.baseInfo.name),
+      subtitle: Text(this.stockInfo.baseInfo.code),
       trailing: Container(
         width: 200,
         child: Row(

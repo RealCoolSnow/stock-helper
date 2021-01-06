@@ -1,13 +1,13 @@
-/// 股票信息
-class StockItem {
-  String id;
+/// 股票基础信息
+class StockBasicInfo {
+  int id;
   String code;
   String name;
 
-  StockItem({this.id, this.code, this.name});
+  StockBasicInfo({this.id, this.code, this.name});
 
-  StockItem.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  StockBasicInfo.fromJson(Map<String, dynamic> json) {
+    id = json['id'] is int ? json['id'] : int.parse(json['id']);
     code = json['code'];
     name = json['name'];
   }

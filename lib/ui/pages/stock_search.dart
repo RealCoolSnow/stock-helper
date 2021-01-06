@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stock_helper/bean/stock_item.dart';
+import 'package:stock_helper/bean/stock_basic_info.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
 
-class StockSearchDelegate extends SearchDelegate<StockItem> {
+class StockSearchDelegate extends SearchDelegate<StockBasicInfo> {
   BuildContext _context;
   StockSearchDelegate({
     String hintText,
@@ -68,7 +68,7 @@ class StockSearchDelegate extends SearchDelegate<StockItem> {
     );
   }
 
-  _buildSearchItem(StockItem stockItem) {
+  _buildSearchItem(StockBasicInfo stockItem) {
     return ListTile(
       dense: true,
       title: Text(stockItem.name),

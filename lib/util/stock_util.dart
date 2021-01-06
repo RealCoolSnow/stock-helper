@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:stock_helper/bean/stock_item.dart';
+import 'package:stock_helper/bean/stock_basic_info.dart';
 import 'package:stock_helper/http/http_util.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
@@ -10,14 +10,14 @@ import 'package:stock_helper/util/log_util.dart';
 
 ///
 class StockUtil {
-  static List<StockItem> stockList = [];
+  static List<StockBasicInfo> stockList = [];
   //
   static void loadAllStocks(BuildContext context) {
     HttpUtil().get('/list', getParams: {}).then((data) {
       stockList = data
-          .map((item) => StockItem.fromJson(item))
+          .map((item) => StockBasicInfo.fromJson(item))
           .toList()
-          .cast<StockItem>();
+          .cast<StockBasicInfo>();
       logUtil.d("loadAllStocks: total = ${stockList.length}");
     }).catchError((error) {
       logUtil.d(error.message);
@@ -25,8 +25,8 @@ class StockUtil {
     });
   }
 
-  static List<StockItem> searchStocks(String text, {int maxCount}) {
-    List<StockItem> list = [];
+  static List<StockBasicInfo> searchStocks(String text, {int maxCount}) {
+    List<StockBasicInfo> list = [];
     if (text != null) {
       text = text.trim();
       if (text.isNotEmpty) {
@@ -44,7 +44,7 @@ class StockUtil {
     return list;
   }
 
-  static Future<bool> addStock(StockItem stockItem) async {
+  static Future<bool> addStock(StockBasicInfo stockItem) async {
     var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
     var conditions = {'code': stockItem.code};
     var result = await sql.query(conditions: conditions);
