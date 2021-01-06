@@ -3,7 +3,8 @@ import 'package:stock_helper/bean/stock_item.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
 
-class StockSearchDelegate extends SearchDelegate<String> {
+class StockSearchDelegate extends SearchDelegate<StockItem> {
+  BuildContext _context;
   StockSearchDelegate({
     String hintText,
   }) : super(
@@ -39,12 +40,48 @@ class StockSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return _SearchContentView(
-      query: query,
+    _context = context;
+    return _buildSearchContentView();
+  }
+
+  _buildSearchContentView() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [_buildSearchItemView()],
+      ),
+    );
+  }
+
+  _buildSearchItemView() {
+    var list = StockUtil.searchStocks(this.query, maxCount: 20);
+    return Container(
+      child: Wrap(
+        // runSpacing: 0,
+        children: list
+            .map((item) {
+              return _buildSearchItem(item);
+            })
+            .toList()
+            .cast<Widget>(),
+      ),
+    );
+  }
+
+  _buildSearchItem(StockItem stockItem) {
+    return ListTile(
+      dense: true,
+      title: Text(stockItem.name),
+      subtitle: Text(stockItem.code),
+      onTap: () {
+        logUtil.d(stockItem.toJson());
+        StockUtil.addStock(stockItem);
+        close(_context, stockItem);
+      },
     );
   }
 }
-
+/*
 class _SearchContentView extends StatefulWidget {
   final String query;
   const _SearchContentView({Key key, this.query}) : super(key: key);
@@ -108,8 +145,10 @@ class _SearchItemState extends State<_SearchItem> {
       title: Text(this.widget.stockItem.name),
       subtitle: Text(this.widget.stockItem.code),
       onTap: () {
-        logUtil.d(this);
+        logUtil.d(this.widget.stockItem.toJson());
+        StockUtil.addStock(this.widget.stockItem);
       },
     );
   }
 }
+*/
