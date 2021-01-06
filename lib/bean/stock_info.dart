@@ -1,3 +1,4 @@
+/// 实时行情信息
 class StockInfo {
   String code;
   String name;

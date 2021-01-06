@@ -32,13 +32,13 @@ class _StockListTabState extends State<StockListTab> {
           '{"code":"600519","name":"贵州茅台","price":2044.90,"price_open":1990.00}'))
     ];
     return stocklist.map((item) {
-      return StockItem(item);
+      return _StockItem(item);
     }).toList();
   }
 }
 
-class StockItem extends StatelessWidget {
-  StockItem(this.stockInfo);
+class _StockItem extends StatelessWidget {
+  _StockItem(this.stockInfo);
 
   final StockInfo stockInfo;
   @override

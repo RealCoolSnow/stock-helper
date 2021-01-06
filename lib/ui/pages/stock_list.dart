@@ -7,11 +7,13 @@ import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
+import 'package:stock_helper/ui/pages/stock_search.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
+import 'package:stock_helper/util/stock_util.dart';
 
-class StockItem extends StatelessWidget {
-  StockItem(this.stockInfo);
+class _StockItem extends StatelessWidget {
+  _StockItem(this.stockInfo);
 
   final StockInfo stockInfo;
   @override
@@ -58,6 +60,13 @@ class StockListPage extends StatefulWidget {
 
 class _StockListPageState extends State<StockListPage> {
   @override
+  void initState() {
+    super.initState();
+    //---load all stocks
+    StockUtil.loadAllStocks(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
@@ -91,7 +100,7 @@ class _StockListPageState extends State<StockListPage> {
           '{"code":"600519","name":"贵州茅台","price":2044.90,"price_open":1990.00}'))
     ];
     return stocklist.map((item) {
-      return StockItem(item);
+      return _StockItem(item);
     }).toList();
   }
 
@@ -105,7 +114,8 @@ class _StockListPageState extends State<StockListPage> {
 
   void _addStock() {
     logUtil.d("_addStock");
-    _testDatabase();
+    //_testDatabase();
+    showSearch(context: context, delegate: StockSearchDelegate());
   }
 
   void _testDatabase() {
