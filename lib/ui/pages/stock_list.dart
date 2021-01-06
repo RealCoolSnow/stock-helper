@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/config/config.dart';
@@ -11,47 +9,6 @@ import 'package:stock_helper/ui/pages/stock_search.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
-
-class _StockItem extends StatelessWidget {
-  _StockItem(this.stockInfo);
-
-  final StockInfo stockInfo;
-  @override
-  Widget build(BuildContext context) {
-    String percent = FormatUtil.get2FixedNumber(
-        (this.stockInfo.price - this.stockInfo.priceOpen) /
-            this.stockInfo.priceOpen *
-            100);
-    return ListTile(
-      dense: true,
-      title: Text(this.stockInfo.name),
-      subtitle: Text(this.stockInfo.code),
-      trailing: Container(
-        width: 200,
-        child: Row(
-          children: [
-            Text(
-              '${this.stockInfo.price}',
-              style: TextStyle(
-                  color: this.stockInfo.price > this.stockInfo.priceOpen
-                      ? Colors.red
-                      : Colors.green),
-            ),
-            Text(
-              '$percent%',
-              style: TextStyle(
-                  color: this.stockInfo.price > this.stockInfo.priceOpen
-                      ? Colors.red
-                      : Colors.green),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-        ),
-      ),
-    );
-  }
-}
 
 class StockListPage extends StatefulWidget {
   @override
@@ -114,7 +71,7 @@ class _StockListPageState extends State<StockListPage> {
     //       '{"code":"600519","name":"贵州茅台","price":2044.90,"price_open":1990.00}'))
     // ];
     return stocklist.map((item) {
-      return _StockItem(item);
+      return _buildStockItem(item);
     }).toList();
   }
 
@@ -123,6 +80,40 @@ class _StockListPageState extends State<StockListPage> {
       onPressed: _addStock,
       tooltip: I18n.of(context).text("add_stock"),
       child: Icon(Icons.add),
+    );
+  }
+
+  Widget _buildStockItem(StockInfo stockInfo) {
+    String percent = FormatUtil.get2FixedNumber(
+        (stockInfo.price - stockInfo.priceOpen) / stockInfo.priceOpen * 100);
+    return ListTile(
+      dense: true,
+      onTap: () {},
+      title: Text(stockInfo.name),
+      subtitle: Text(stockInfo.code),
+      trailing: Container(
+        width: 200,
+        child: Row(
+          children: [
+            Text(
+              '${stockInfo.price}',
+              style: TextStyle(
+                  color: stockInfo.price > stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+            Text(
+              '$percent%',
+              style: TextStyle(
+                  color: stockInfo.price > stockInfo.priceOpen
+                      ? Colors.red
+                      : Colors.green),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+        ),
+      ),
     );
   }
 
