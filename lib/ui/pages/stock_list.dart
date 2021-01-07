@@ -6,6 +6,7 @@ import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/ui/pages/stock_search.dart';
+import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
@@ -23,7 +24,10 @@ class _StockListPageState extends State<StockListPage> {
     super.initState();
     //---load all stocks
     StockUtil.loadAllStocks(context);
-    //---
+    _loadShownStockList();
+  }
+
+  _loadShownStockList() {
     sql.rawQuery("SELECT * FROM ${SqlTable.NAME_STOCKS} ORDER BY ID DESC",
         []).then((value) {
       logUtil.d(value);
@@ -89,6 +93,7 @@ class _StockListPageState extends State<StockListPage> {
     return ListTile(
       dense: true,
       onTap: () {},
+      onLongPress: () => _delStock(stockInfo),
       title: Text(stockInfo.baseInfo.name),
       subtitle: Text(stockInfo.baseInfo.code),
       trailing: Container(
@@ -124,9 +129,30 @@ class _StockListPageState extends State<StockListPage> {
     // logUtil.d(info.toJson());
     //_testDatabase();
     showSearch(
-        context: context,
-        delegate:
-            StockSearchDelegate(hintText: I18n.of(context).text('search_tip')));
+            context: context,
+            delegate: StockSearchDelegate(
+                hintText: I18n.of(context).text('search_tip')))
+        .then((value) {
+      logUtil.d('showSearch result: $value');
+      if (value != null) {
+        _loadShownStockList();
+      }
+    });
+  }
+
+  void _delStock(StockInfo stockInfo) {
+    DialogUtil.showMessage(context, stockInfo.baseInfo.name,
+        I18n.of(context).text('del_stock_tip'),
+        negativeText: I18n.of(context).text('cancel'),
+        positiveText: I18n.of(context).text('delete'), positiveCallback: () {
+      Navigator.pop(context);
+      sql.delete('id', stockInfo.baseInfo.id).then((value) {
+        logUtil.d('delete result: $value');
+        _loadShownStockList();
+      }).catchError((err) {
+        logUtil.d(err);
+      });
+    });
   }
 
   void _testDatabase() {

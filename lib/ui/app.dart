@@ -40,7 +40,7 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
         primarySwatch: AppTheme.primary,
-        splashColor: AppTheme.splash,
+        splashColor: AppTheme.secondary,
       ),
       localizationsDelegates: [
         const I18nDelegate(),

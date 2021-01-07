@@ -4,5 +4,5 @@ class AppTheme {
   AppTheme._();
 
   static const Color primary = Colors.blue;
-  static const Color splash = Colors.pink;
+  static const Color secondary = Colors.pink;
 }
