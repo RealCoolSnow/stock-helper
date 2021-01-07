@@ -148,7 +148,9 @@ class _StockListPageState extends State<StockListPage> {
       Navigator.pop(context);
       sql.delete('id', stockInfo.baseInfo.id).then((value) {
         logUtil.d('delete result: $value');
-        _loadShownStockList();
+        setState(() {
+          stocklist.remove(stockInfo);
+        });
       }).catchError((err) {
         logUtil.d(err);
       });
