@@ -9,15 +9,14 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_helper/ui/pages/about.dart';
-import 'package:stock_helper/ui/pages/home.dart';
 import 'package:stock_helper/ui/pages/setting.dart';
 import 'package:stock_helper/ui/pages/stock_list.dart';
 
 /// home
-var homeHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-  return HomePage();
-});
+// var homeHandler = Handler(
+//     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+//   return HomePage();
+// });
 
 var stockListHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {

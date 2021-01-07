@@ -24,7 +24,7 @@ class Routes {
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("ROUTE WAS NOT FOUND !!!");
     });
-    router.define(home, handler: homeHandler);
+    // router.define(home, handler: homeHandler);
     router.define(setting, handler: settingHandler);
     router.define(stock_list, handler: stockListHandler);
     router.define(about,

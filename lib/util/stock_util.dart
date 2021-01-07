@@ -1,7 +1,9 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_basic_info.dart';
+import 'package:stock_helper/bean/stock_info.dart';
+import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/http/http_util.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
@@ -10,6 +12,7 @@ import 'package:stock_helper/util/log_util.dart';
 
 ///
 class StockUtil {
+  static const String API_STOCK = 'https://hq.sinajs.cn/list=';
   static List<StockBasicInfo> stockList = [];
   //
   static void loadAllStocks(BuildContext context) {
@@ -56,5 +59,33 @@ class StockUtil {
       return id > 0;
     }
     return false;
+  }
+
+  static Future<List<StockPrice>> updateStockPrice(
+      List<String> list, String codes) {
+    Completer<List<StockPrice>> completer = Completer();
+    String url = API_STOCK + codes;
+    HttpUtil().getDio().get(url).then((response) {
+      return completer.complete(_parseSinaData(list, response.data));
+    });
+    return completer.future;
+  }
+
+  static List<StockPrice> _parseSinaData(List<String> list, String data) {
+    logUtil.d("_parseSinaData : $data");
+    List<StockPrice> priceList = [];
+    if (list != null && list.isNotEmpty && data != null && data.isNotEmpty) {
+      List<String> strArray = data.trim().split(';');
+      if (strArray.isNotEmpty && strArray.length >= list.length) {
+        for (int i = 0; i < list.length; ++i) {
+          logUtil.d(strArray[i]);
+          StockPrice stockPrice = StockPrice();
+          stockPrice.loadSinaData(strArray[i].split(','));
+          priceList.add(stockPrice);
+          logUtil.d("stockPrice : ${stockPrice.time}");
+        }
+      }
+    }
+    return priceList;
   }
 }

@@ -19,6 +19,8 @@ class StockListPage extends StatefulWidget {
 class _StockListPageState extends State<StockListPage> {
   var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
   List<StockInfo> stocklist = [];
+  String stockCodeString = '';
+  List<String> stockCodeList = [];
   @override
   void initState() {
     super.initState();
@@ -28,16 +30,24 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   _loadShownStockList() {
+    stockCodeString = '';
+    stockCodeList.clear();
     sql.rawQuery("SELECT * FROM ${SqlTable.NAME_STOCKS} ORDER BY ID DESC",
         []).then((value) {
       logUtil.d(value);
       var list = value
-          .map((item) => StockInfo.fromJson(item))
+          .map((item) {
+            stockCodeString += item['code'] + ',';
+            stockCodeList.add(item['code']);
+            return StockInfo.baseInfoFromJson(item);
+          })
           .toList()
           .cast<StockInfo>();
       setState(() {
         stocklist = list;
       });
+      logUtil.d('stockCodes $stockCodeString');
+      _updateStockInfo();
     });
   }
 
@@ -64,16 +74,6 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   List<Widget> _getStockList() {
-    // List<StockInfo> stocklist = [
-    //   StockInfo.fromJson(jsonDecode(
-    //       '{"code":"601360","name":"三六零","price":15.3,"price_open":15.7}')),
-    //   StockInfo.fromJson(jsonDecode(
-    //       '{"code":"002340","name":"格林美","price":7.99,"price_open":7.94}')),
-    //   StockInfo.fromJson(jsonDecode(
-    //       '{"code":"002594","name":"比亚迪","price":206.00,"price_open":212.58}')),
-    //   StockInfo.fromJson(jsonDecode(
-    //       '{"code":"600519","name":"贵州茅台","price":2044.90,"price_open":1990.00}'))
-    // ];
     return stocklist.map((item) {
       return _buildStockItem(item);
     }).toList();
@@ -89,7 +89,9 @@ class _StockListPageState extends State<StockListPage> {
 
   Widget _buildStockItem(StockInfo stockInfo) {
     String percent = FormatUtil.get2FixedNumber(
-        (stockInfo.price - stockInfo.priceOpen) / stockInfo.priceOpen * 100);
+        (stockInfo.priceInfo.price - stockInfo.priceInfo.yesterdayClose) /
+            stockInfo.priceInfo.yesterdayClose *
+            100);
     return ListTile(
       dense: true,
       onTap: () {},
@@ -101,16 +103,18 @@ class _StockListPageState extends State<StockListPage> {
         child: Row(
           children: [
             Text(
-              '${stockInfo.price}',
+              '${stockInfo.priceInfo.price}',
               style: TextStyle(
-                  color: stockInfo.price > stockInfo.priceOpen
+                  color: stockInfo.priceInfo.price >
+                          stockInfo.priceInfo.yesterdayClose
                       ? Colors.red
                       : Colors.green),
             ),
             Text(
               '$percent%',
               style: TextStyle(
-                  color: stockInfo.price > stockInfo.priceOpen
+                  color: stockInfo.priceInfo.price >
+                          stockInfo.priceInfo.yesterdayClose
                       ? Colors.red
                       : Colors.green),
             ),
@@ -124,10 +128,6 @@ class _StockListPageState extends State<StockListPage> {
 
   void _addStock() {
     logUtil.d("_addStock");
-    // StockInfo info =
-    //     StockInfo.fromJson(jsonDecode('{"code":"601360","name":"三六零"}'));
-    // logUtil.d(info.toJson());
-    //_testDatabase();
     showSearch(
             context: context,
             delegate: StockSearchDelegate(
@@ -152,6 +152,19 @@ class _StockListPageState extends State<StockListPage> {
       }).catchError((err) {
         logUtil.d(err);
       });
+    });
+  }
+
+  void _updateStockInfo() {
+    StockUtil.updateStockPrice(stockCodeList, stockCodeString)
+        .then((pricesList) {
+      if (stocklist.length >= pricesList.length) {
+        setState(() {
+          for (int i = 0; i < stocklist.length; i++) {
+            stocklist[i].priceInfo = pricesList[i];
+          }
+        });
+      }
     });
   }
 
