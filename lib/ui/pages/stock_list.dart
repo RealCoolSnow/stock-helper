@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_info.dart';
+import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
@@ -19,8 +20,9 @@ class StockListPage extends StatefulWidget {
 class _StockListPageState extends State<StockListPage> {
   var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
   List<StockInfo> stocklist = [];
-  String stockCodeString = '';
-  List<String> stockCodeList = [];
+  Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
+  String stockCodeString = ''; //股票代码列表
+  List<String> stockCodeList = []; //股票代码列表
   @override
   void initState() {
     super.initState();
@@ -39,7 +41,11 @@ class _StockListPageState extends State<StockListPage> {
           .map((item) {
             stockCodeString += item['code'] + ',';
             stockCodeList.add(item['code']);
-            return StockInfo.baseInfoFromJson(item);
+            StockInfo stockInfo = StockInfo.baseInfoFromJson(item);
+            if (stockPriceMap.containsKey(item['code'])) {
+              stockInfo.priceInfo = stockPriceMap[item['code']];
+            }
+            return stockInfo;
           })
           .toList()
           .cast<StockInfo>();
@@ -164,6 +170,7 @@ class _StockListPageState extends State<StockListPage> {
         setState(() {
           for (int i = 0; i < stocklist.length; i++) {
             stocklist[i].priceInfo = pricesList[i];
+            stockPriceMap[stocklist[i].baseInfo.code] = pricesList[i];
           }
         });
       }
