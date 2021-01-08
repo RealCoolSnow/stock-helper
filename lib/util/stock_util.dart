@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_basic_info.dart';
-import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/http/http_util.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
@@ -61,31 +60,35 @@ class StockUtil {
     return false;
   }
 
-  static Future<List<StockPrice>> updateStockPrice(
-      List<String> list, String codes) {
-    Completer<List<StockPrice>> completer = Completer();
+  static Future<Map<String, StockPrice>> updateStockPrice(String codes) {
+    Completer<Map<String, StockPrice>> completer = Completer();
     String url = API_STOCK + codes;
     HttpUtil().getDio().get(url).then((response) {
-      return completer.complete(_parseSinaData(list, response.data));
+      return completer.complete(_parseSinaData(response.data));
     });
     return completer.future;
   }
 
-  static List<StockPrice> _parseSinaData(List<String> list, String data) {
+  static Map<String, StockPrice> _parseSinaData(String data) {
     logUtil.d("_parseSinaData : $data");
-    List<StockPrice> priceList = [];
-    if (list != null && list.isNotEmpty && data != null && data.isNotEmpty) {
-      List<String> strArray = data.trim().split(';');
-      if (strArray.isNotEmpty && strArray.length >= list.length) {
-        for (int i = 0; i < list.length; ++i) {
-          logUtil.d(strArray[i]);
+    Map<String, StockPrice> priceMap = {};
+    if (data != null && data.isNotEmpty) {
+      List<String> stockArray = data.trim().split(';');
+      if (stockArray.isNotEmpty) {
+        for (int i = 0; i < stockArray.length; ++i) {
+          logUtil.d(stockArray[i]);
           StockPrice stockPrice = StockPrice();
-          stockPrice.loadSinaData(strArray[i].split(','));
-          priceList.add(stockPrice);
-          logUtil.d("stockPrice : ${stockPrice.time}");
+          List<String> priceArray = stockArray[i].split(',');
+          if (priceArray[0].length > 20) {
+            stockPrice.loadSinaData(priceArray);
+            String code =
+                RegExp(r"(?<=hq_str_).*(?==)").stringMatch(priceArray[0]);
+            priceMap[code] = stockPrice;
+            logUtil.d('code===: $code');
+          }
         }
       }
     }
-    return priceList;
+    return priceMap;
   }
 }

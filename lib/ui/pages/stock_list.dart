@@ -22,7 +22,6 @@ class _StockListPageState extends State<StockListPage> {
   List<StockInfo> stocklist = [];
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
-  List<String> stockCodeList = []; //股票代码列表
   @override
   void initState() {
     super.initState();
@@ -33,14 +32,12 @@ class _StockListPageState extends State<StockListPage> {
 
   _loadShownStockList() {
     stockCodeString = '';
-    stockCodeList.clear();
     sql.rawQuery("SELECT * FROM ${SqlTable.NAME_STOCKS} ORDER BY ID DESC",
         []).then((value) {
       logUtil.d(value);
       var list = value
           .map((item) {
             stockCodeString += item['code'] + ',';
-            stockCodeList.add(item['code']);
             StockInfo stockInfo = StockInfo.baseInfoFromJson(item);
             if (stockPriceMap.containsKey(item['code'])) {
               stockInfo.priceInfo = stockPriceMap[item['code']];
@@ -164,14 +161,15 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _updateStockInfo() {
-    StockUtil.updateStockPrice(stockCodeList, stockCodeString)
-        .then((pricesList) {
-      if (stocklist.length >= pricesList.length) {
+    StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
+      if (pricesMap != null && pricesMap.isNotEmpty) {
         setState(() {
           for (int i = 0; i < stocklist.length; i++) {
-            stocklist[i].priceInfo = pricesList[i];
-            stockPriceMap[stocklist[i].baseInfo.code] = pricesList[i];
+            if (pricesMap.containsKey(stocklist[i].baseInfo.code)) {
+              stocklist[i].priceInfo = pricesMap[stocklist[i].baseInfo.code];
+            }
           }
+          stockPriceMap = pricesMap;
         });
       }
     });
