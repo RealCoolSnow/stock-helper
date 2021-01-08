@@ -69,7 +69,12 @@ class _StockListPageState extends State<StockListPage> {
           ],
         ),
         floatingActionButton: _buildActionButton(),
-        body: Container(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              _loadShownStockList();
+            });
+          },
           child: ListView(
             children: this._getStockList(),
           ),
