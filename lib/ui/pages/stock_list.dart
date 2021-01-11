@@ -7,10 +7,12 @@ import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/ui/pages/stock_search.dart';
+import 'package:stock_helper/util/common_util.dart';
 import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StockListPage extends StatefulWidget {
   @override
@@ -102,7 +104,7 @@ class _StockListPageState extends State<StockListPage> {
             100);
     return ListTile(
       dense: true,
-      onTap: () {},
+      onTap: () => _showStock(stockInfo),
       onLongPress: () => _delStock(stockInfo),
       title: Text(stockInfo.baseInfo.name),
       subtitle: Text(stockInfo.baseInfo.code),
@@ -163,6 +165,11 @@ class _StockListPageState extends State<StockListPage> {
         logUtil.d(err);
       });
     });
+  }
+
+  void _showStock(StockInfo stockInfo) {
+    String url = 'https://xueqiu.com/S/${stockInfo.baseInfo.code}';
+    CommonUtil.launchURL(url);
   }
 
   void _updateStockInfo() {
