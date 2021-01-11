@@ -7,30 +7,42 @@ import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/ui/pages/stock_search.dart';
-import 'package:stock_helper/util/common_util.dart';
 import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
 import 'package:stock_helper/util/stock_website.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class StockListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _StockListPageState();
 }
 
-class _StockListPageState extends State<StockListPage> {
+class _StockListPageState extends State<StockListPage>
+    with WidgetsBindingObserver {
   var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
   List<StockInfo> stocklist = [];
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     //---load all stocks
     StockUtil.loadAllStocks(context);
     _loadShownStockList();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    logUtil.d('didChangeAppLifecycleState: ${state.toString()}');
   }
 
   _loadShownStockList() {

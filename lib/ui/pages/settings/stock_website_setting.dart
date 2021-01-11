@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:stock_helper/config/pref_key.dart';
-import 'package:stock_helper/config/stock_website.dart';
+import 'package:stock_helper/util/stock_website.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/Pref.dart';
 import 'package:stock_helper/ui/app_theme.dart';
