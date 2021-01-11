@@ -12,6 +12,7 @@ import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
+import 'package:stock_helper/util/stock_website.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StockListPage extends StatefulWidget {
@@ -168,8 +169,7 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _showStock(StockInfo stockInfo) {
-    String url = 'https://xueqiu.com/S/${stockInfo.baseInfo.code}';
-    CommonUtil.launchURL(url);
+    StockWebSiteUtil.showStockInfo(stockInfo.baseInfo.code);
   }
 
   void _updateStockInfo() {

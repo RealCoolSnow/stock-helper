@@ -48,7 +48,8 @@ class _SettingPageState extends State<SettingPage> {
               ),
               SettingsTile(
                 title: I18n.of(context).text('stock_website'),
-                trailing: Text(_stockWebSite),
+                subtitle: _stockWebSite,
+                trailing: Icon(Icons.keyboard_arrow_right),
                 leading: Icon(Icons.language),
                 onPressed: (BuildContext context) {
                   Config.router
