@@ -10,6 +10,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_helper/ui/pages/about.dart';
 import 'package:stock_helper/ui/pages/setting.dart';
+import 'package:stock_helper/ui/pages/settings/stock_website_setting.dart';
 import 'package:stock_helper/ui/pages/stock_list.dart';
 
 /// home
@@ -32,4 +33,9 @@ var settingHandler = Handler(
 var aboutHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return AboutPage();
+});
+
+var stockWebSiteSettingHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return StockWebSiteSettingPage();
 });

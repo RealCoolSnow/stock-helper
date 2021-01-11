@@ -9,5 +9,10 @@
   "search_tip": "请输入股票代码或名称",
   "del_stock_tip": "确定要删除？",
   "delete": "删除",
-  "cancel": "取消"
+  "cancel": "取消",
+  "show_tray": "托盘显示",
+  "stock_website": "行情网站",
+  "sina": "新浪",
+  "xueqiu": "雪球",
+  "tonghuashun": "同花顺"
 }

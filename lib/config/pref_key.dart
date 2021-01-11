@@ -7,4 +7,10 @@
  */
 class PrefKey {
   static const String launchTime = "launch_time";
+  static const String settingTrayIcon = "tray_icon";
+  static const String settingStockWebSite = "stock_website";
+}
+
+class PrefDefault {
+  static const bool settingTrayIcon = true;
 }

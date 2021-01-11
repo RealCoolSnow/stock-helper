@@ -1,8 +1,13 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:stock_helper/config/config.dart';
+import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/config/route/routes.dart';
+import 'package:stock_helper/config/stock_website.dart';
 import 'package:stock_helper/locale/i18n.dart';
+import 'package:stock_helper/storage/Pref.dart';
+import 'package:stock_helper/ui/app_theme.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -10,19 +15,63 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  bool _settingTrayIcon = PrefDefault.settingTrayIcon;
+  String _stockWebSite = '';
+  _SettingPageState() {
+    Pref.setBool(PrefKey.settingTrayIcon, PrefDefault.settingTrayIcon)
+        .then((value) => _settingTrayIcon = value);
+    _updateStockWebSite();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(title: new Text(I18n.of(context).text("setting"))),
-      body: Center(
-        child: RaisedButton(
-          child: Text(I18n.of(context).text('about')),
-          onPressed: () {
-            Config.router.navigateTo(context, Routes.about,
-                transition: TransitionType.fadeIn);
-          },
-        ),
+      appBar: AppBar(title: Text(I18n.of(context).text("setting"))),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            tiles: [
+              SettingsTile.switchTile(
+                title: I18n.of(context).text('show_tray'),
+                leading: Icon(Icons.notifications),
+                switchValue: _settingTrayIcon,
+                switchActiveColor: AppTheme.secondary,
+                onToggle: (bool value) {
+                  Pref.setBool(PrefKey.settingTrayIcon, value).then((result) {
+                    if (result) {
+                      setState(() {
+                        _settingTrayIcon = value;
+                      });
+                    }
+                  });
+                },
+              ),
+              SettingsTile(
+                title: I18n.of(context).text('stock_website'),
+                trailing: Text(_stockWebSite),
+                leading: Icon(Icons.language),
+                onPressed: (BuildContext context) {
+                  Config.router
+                      .navigateTo(context, Routes.stock_website_setting,
+                          transition: TransitionType.fadeIn)
+                      .then((value) {
+                    _updateStockWebSite();
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
+  }
+
+  _updateStockWebSite() {
+    Pref.getInt(PrefKey.settingStockWebSite).then((value) {
+      setState(() {
+        _stockWebSite =
+            StockWebSiteUtil.getText(context, StockWebSite.values[value]);
+      });
+    });
   }
 }

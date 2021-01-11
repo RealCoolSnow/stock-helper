@@ -19,6 +19,7 @@ class Routes {
   static const String setting = "/setting";
   static const String stock_list = "/stock_list";
   static const String about = "/about";
+  static const String stock_website_setting = "/stock_website_setting";
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -29,5 +30,6 @@ class Routes {
     router.define(stock_list, handler: stockListHandler);
     router.define(about,
         handler: aboutHandler, transitionType: TransitionType.fadeIn);
+    router.define(stock_website_setting, handler: stockWebSiteSettingHandler);
   }
 }
