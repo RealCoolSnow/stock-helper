@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
@@ -24,7 +26,7 @@ class _StockListPageState extends State<StockListPage>
   List<StockInfo> stocklist = [];
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
-
+  bool timerRunning = false;
   @override
   void initState() {
     super.initState();
@@ -65,7 +67,7 @@ class _StockListPageState extends State<StockListPage>
         stocklist = list;
       });
       logUtil.d('stockCodes $stockCodeString');
-      _updateStockInfo();
+      _startTimer();
     });
   }
 
@@ -213,5 +215,24 @@ class _StockListPageState extends State<StockListPage>
     sql
         .query(conditions: conditions)
         .then((value) => logUtil.d('result $value'));
+  }
+
+  void _startTimer() {
+    if (!timerRunning) {
+      timerRunning = true;
+      _updateStockInfo();
+      Timer.periodic(Duration(milliseconds: Config.stockTimerDuration),
+          (timer) {
+        if (!timerRunning) {
+          timer.cancel();
+        } else {
+          _updateStockInfo();
+        }
+      });
+    }
+  }
+
+  void _stopTimer() {
+    timerRunning = false;
   }
 }

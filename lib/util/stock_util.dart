@@ -50,11 +50,9 @@ class StockUtil {
     var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
     var conditions = {'code': stockItem.code};
     var result = await sql.query(conditions: conditions);
-    logUtil.d('addStock - query $result');
     if (result == null || result.isEmpty) {
       var item = {'code': stockItem.code, 'name': stockItem.name};
       var id = await sql.insert(item);
-      logUtil.d('addStock - insert $id');
       return id > 0;
     }
     return false;
@@ -76,7 +74,6 @@ class StockUtil {
       List<String> stockArray = data.trim().split(';');
       if (stockArray.isNotEmpty) {
         for (int i = 0; i < stockArray.length; ++i) {
-          logUtil.d(stockArray[i]);
           StockPrice stockPrice = StockPrice();
           List<String> priceArray = stockArray[i].split(',');
           if (priceArray[0].length > 20) {
@@ -84,7 +81,6 @@ class StockUtil {
             String code =
                 RegExp(r"(?<=hq_str_).*(?==)").stringMatch(priceArray[0]);
             priceMap[code] = stockPrice;
-            logUtil.d('code===: $code');
           }
         }
       }
