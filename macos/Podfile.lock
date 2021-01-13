@@ -1,4 +1,6 @@
 PODS:
+  - flutter_status_bar (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -14,6 +16,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - flutter_status_bar (from `Flutter/ephemeral/.symlinks/plugins/flutter_status_bar/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
   - shared_preferences_macos (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos`)
@@ -25,6 +28,8 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  flutter_status_bar:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_status_bar/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   path_provider_macos:
@@ -37,6 +42,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
+  flutter_status_bar: 6f1dbe1f0138d9ce3825c2f2f9a922c053d2a4fd
   FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b

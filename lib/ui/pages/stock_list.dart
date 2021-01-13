@@ -14,6 +14,7 @@ import 'package:stock_helper/util/format_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
 import 'package:stock_helper/util/stock_website.dart';
+import 'package:stock_helper/util/tray_util.dart';
 
 class StockListPage extends StatefulWidget {
   @override
@@ -73,6 +74,8 @@ class _StockListPageState extends State<StockListPage>
 
   @override
   Widget build(BuildContext context) {
+    //---tray icon
+    TrayUtil.refreshState(I18n.of(context).text('app_name'));
     return Scaffold(
         appBar: new AppBar(
           title: new Text(I18n.of(context).text("app_name")),

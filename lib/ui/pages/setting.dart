@@ -8,6 +8,7 @@ import 'package:stock_helper/util/stock_website.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/Pref.dart';
 import 'package:stock_helper/ui/app_theme.dart';
+import 'package:stock_helper/util/tray_util.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -42,6 +43,7 @@ class _SettingPageState extends State<SettingPage> {
                       setState(() {
                         _settingTrayIcon = value;
                       });
+                      TrayUtil.refreshState(I18n.of(context).text('app_name'));
                     }
                   });
                 },
