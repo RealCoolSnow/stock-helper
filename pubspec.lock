@@ -182,7 +182,7 @@ packages:
     description:
       path: flutter_status_bar
       ref: HEAD
-      resolved-ref: "7e474a81bce331b46ec687db348d8f168bdc7e10"
+      resolved-ref: f5504c4dbe2669e0cba61ba37cfed426a4801d73
       url: "https://github.com/RealCoolSnow/flutter_status_bar_plugin.git"
     source: git
     version: "0.0.1"

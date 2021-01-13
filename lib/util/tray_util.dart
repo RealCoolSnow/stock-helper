@@ -6,9 +6,7 @@ class TrayUtil {
   static void refreshState(String initText) {
     Pref.getBool(PrefKey.settingTrayIcon).then((value) {
       if (value) {
-        FlutterStatusBar.showStatusBar().then((value) {
-          FlutterStatusBar.setStatusBarText(initText);
-        });
+        FlutterStatusBar.showStatusBar(initText);
       } else {
         FlutterStatusBar.hideStatusBar();
       }
