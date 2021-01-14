@@ -19,8 +19,10 @@ class _SettingPageState extends State<SettingPage> {
   bool _settingTrayIcon = PrefDefault.settingTrayIcon;
   String _stockWebSite = '';
   _SettingPageState() {
-    Pref.setBool(PrefKey.settingTrayIcon, PrefDefault.settingTrayIcon)
-        .then((value) => _settingTrayIcon = value);
+    Pref.getBool(PrefKey.settingTrayIcon, PrefDefault.settingTrayIcon)
+        .then((value) {
+      _settingTrayIcon = value;
+    });
     _updateStockWebSite();
   }
 
@@ -70,7 +72,8 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   _updateStockWebSite() {
-    Pref.getInt(PrefKey.settingStockWebSite).then((value) {
+    Pref.getInt(PrefKey.settingStockWebSite, PrefDefault.stockWebsiteIndex)
+        .then((value) {
       setState(() {
         _stockWebSite =
             StockWebSiteUtil.getText(context, StockWebSite.values[value]);

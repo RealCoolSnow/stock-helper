@@ -14,7 +14,8 @@ class StockWebSiteSettingPage extends StatefulWidget {
 class _StockWebSiteSettingPageState extends State<StockWebSiteSettingPage> {
   int current = 0;
   _StockWebSiteSettingPageState() {
-    Pref.getInt(PrefKey.settingStockWebSite).then((value) {
+    Pref.getInt(PrefKey.settingStockWebSite, PrefDefault.stockWebsiteIndex)
+        .then((value) {
       setState(() {
         current = value;
       });

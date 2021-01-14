@@ -27,9 +27,10 @@ class Pref {
     return prefs.setString(key, value);
   }
 
-  static Future<String> getString(String key) async {
+  static Future<String> getString(String key, String def) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getString(key);
+    String v = prefs.getString(key);
+    return v == null ? def : v;
   }
 
   static Future<bool> setBool(String key, bool value) async {
@@ -37,9 +38,10 @@ class Pref {
     return prefs.setBool(key, value);
   }
 
-  static Future<bool> getBool(String key) async {
+  static Future<bool> getBool(String key, bool def) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getBool(key);
+    bool v = prefs.getBool(key);
+    return v == null ? def : v;
   }
 
   static Future<bool> setInt(String key, int value) async {
@@ -47,9 +49,10 @@ class Pref {
     return prefs.setInt(key, value);
   }
 
-  static Future<int> getInt(String key) async {
+  static Future<int> getInt(String key, int def) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getInt(key);
+    int v = prefs.getInt(key);
+    return v == null ? def : v;
   }
 
   static Future<bool> setDouble(String key, double value) async {
@@ -57,8 +60,9 @@ class Pref {
     return prefs.setDouble(key, value);
   }
 
-  static Future<double> getDouble(String key) async {
+  static Future<double> getDouble(String key, double def) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getDouble(key);
+    double v = prefs.getDouble(key);
+    return v == null ? def : v;
   }
 }

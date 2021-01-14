@@ -4,7 +4,8 @@ import 'package:stock_helper/storage/Pref.dart';
 
 class TrayUtil {
   static void refreshState(String initText) {
-    Pref.getBool(PrefKey.settingTrayIcon).then((value) {
+    Pref.getBool(PrefKey.settingTrayIcon, PrefDefault.settingTrayIcon)
+        .then((value) {
       if (value) {
         FlutterStatusBar.showStatusBar(initText);
       } else {

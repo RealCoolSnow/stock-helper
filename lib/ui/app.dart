@@ -29,7 +29,7 @@ class _AppState extends State<App> {
     Provider().init();
     //---logutil
     logUtil.setEnabled(Config.debug);
-    Pref.getString(PrefKey.launchTime)
+    Pref.getString(PrefKey.launchTime, "")
         .then((value) => logUtil.d("App created $value"));
   }
 

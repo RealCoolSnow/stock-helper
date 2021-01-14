@@ -12,5 +12,6 @@ class PrefKey {
 }
 
 class PrefDefault {
-  static const bool settingTrayIcon = true;
+  static const bool settingTrayIcon = false;
+  static const int stockWebsiteIndex = 0;
 }

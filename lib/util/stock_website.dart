@@ -21,7 +21,8 @@ class StockWebSiteUtil {
   }
 
   static Future<void> showStockInfo(String code) async {
-    int i = await Pref.getInt(PrefKey.settingStockWebSite);
+    int i = await Pref.getInt(
+        PrefKey.settingStockWebSite, PrefDefault.stockWebsiteIndex);
     String url = 'https://xueqiu.com/S/$code';
     switch (StockWebSite.values[i]) {
       case StockWebSite.Sina:
