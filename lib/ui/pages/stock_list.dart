@@ -134,7 +134,7 @@ class _StockListPageState extends State<StockListPage>
         child: Row(
           children: [
             Text(
-              '${stockInfo.priceInfo.price}',
+              '${stockInfo.priceInfo.priceStr}',
               style: TextStyle(
                   color: stockInfo.priceInfo.price >
                           stockInfo.priceInfo.yesterdayClose
@@ -213,10 +213,13 @@ class _StockListPageState extends State<StockListPage>
       logUtil.d('isShown $value');
       String text = "";
       if (stocklist.length > 0) {
-        text += '${stocklist[0].priceInfo.price}';
+        text += '${stocklist[0].priceInfo.priceStr}';
       }
       if (stocklist.length > 1) {
-        text += ' ${stocklist[1].priceInfo.price}';
+        text += ' ${stocklist[1].priceInfo.priceStr}';
+      }
+      if (stocklist.length > 2) {
+        text += ' ${stocklist[2].priceInfo.priceStr}';
       }
       if (text.isNotEmpty) {
         FlutterStatusBar.setStatusBarText(text);

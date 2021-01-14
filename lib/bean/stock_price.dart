@@ -4,6 +4,7 @@ class StockPrice {
   double open = 0; //1-今日开盘价
   double yesterdayClose = 0; //2-昨日收盘价
   double price = 0; //3-当前价格
+  String priceStr = ''; //3-当前价格(字符串)
   double high = 0; //4-今日最高价
   double low = 0; //5-今日最低价
   double buy = 0; //6-竞买价，即“买一”报价
@@ -39,6 +40,7 @@ class StockPrice {
       open = double.parse(data[1]);
       yesterdayClose = double.parse(data[2]);
       price = double.parse(data[3]);
+      priceStr = price.toStringAsFixed(2);
       high = double.parse(data[4]);
       low = double.parse(data[5]);
       buy = double.parse(data[6]);
