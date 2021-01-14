@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_status_bar/flutter_status_bar.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/config/config.dart';
@@ -35,6 +36,10 @@ class _StockListPageState extends State<StockListPage>
     //---load all stocks
     StockUtil.loadAllStocks(context);
     _loadShownStockList();
+    //---tray icon
+    Future.delayed(Duration.zero, () {
+      TrayUtil.refreshState(I18n.of(context).text('app_name'));
+    });
   }
 
   @override
@@ -74,8 +79,6 @@ class _StockListPageState extends State<StockListPage>
 
   @override
   Widget build(BuildContext context) {
-    //---tray icon
-    TrayUtil.refreshState(I18n.of(context).text('app_name'));
     return Scaffold(
         appBar: new AppBar(
           title: new Text(I18n.of(context).text("app_name")),
@@ -200,6 +203,23 @@ class _StockListPageState extends State<StockListPage>
           }
           stockPriceMap = pricesMap;
         });
+        _updateStatusBar();
+      }
+    });
+  }
+
+  void _updateStatusBar() {
+    FlutterStatusBar.isShown().then((value) {
+      logUtil.d('isShown $value');
+      String text = "";
+      if (stocklist.length > 0) {
+        text += '${stocklist[0].priceInfo.price}';
+      }
+      if (stocklist.length > 1) {
+        text += ' ${stocklist[1].priceInfo.price}';
+      }
+      if (text.isNotEmpty) {
+        FlutterStatusBar.setStatusBarText(text);
       }
     });
   }
