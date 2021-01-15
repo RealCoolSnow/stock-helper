@@ -7,7 +7,11 @@ class StockBasicInfo {
   StockBasicInfo({this.id, this.code, this.name});
 
   StockBasicInfo.fromJson(Map<String, dynamic> json) {
-    id = json['id'] is int ? json['id'] : int.parse(json['id']);
+    if (json['id'] == null) {
+      id = 0;
+    } else {
+      id = json['id'] is int ? json['id'] : int.parse(json['id']);
+    }
     code = json['code'];
     name = json['name'];
   }
