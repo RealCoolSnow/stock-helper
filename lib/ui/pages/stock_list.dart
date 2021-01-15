@@ -22,9 +22,8 @@ class StockListPage extends StatefulWidget {
   State<StatefulWidget> createState() => _StockListPageState();
 }
 
-class _StockListPageState extends State<StockListPage>
-    with WidgetsBindingObserver {
-  var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
+class _StockListPageState extends State<StockListPage> {
+  var sql;
   List<StockInfo> stocklist = [];
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
@@ -32,7 +31,7 @@ class _StockListPageState extends State<StockListPage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
     //---load all stocks
     StockUtil.loadAllStocks(context);
     _loadShownStockList();
@@ -40,17 +39,6 @@ class _StockListPageState extends State<StockListPage>
     Future.delayed(Duration.zero, () {
       TrayUtil.refreshState(I18n.of(context).text('app_name'));
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    logUtil.d('didChangeAppLifecycleState: ${state.toString()}');
   }
 
   _loadShownStockList() {
@@ -83,6 +71,11 @@ class _StockListPageState extends State<StockListPage>
         appBar: new AppBar(
           title: new Text(I18n.of(context).text("app_name")),
           actions: <Widget>[
+            // IconButton(
+            //   icon: Icon(Icons.add),
+            //   tooltip: I18n.of(context).text("add_stock"),
+            //   onPressed: _addStock,
+            // ),
             IconButton(
               icon: Icon(Icons.settings),
               tooltip: I18n.of(context).text("setting"),
@@ -92,16 +85,11 @@ class _StockListPageState extends State<StockListPage>
           ],
         ),
         floatingActionButton: _buildActionButton(),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            setState(() {
-              _loadShownStockList();
-            });
-          },
-          child: ListView(
-            children: this._getStockList(),
-          ),
-        ));
+        body: stocklist.isNotEmpty
+            ? ListView(
+                children: this._getStockList(),
+              )
+            : Center(child: Text(I18n.of(context).text("add_stock_tip"))));
   }
 
   List<Widget> _getStockList() {
@@ -112,9 +100,7 @@ class _StockListPageState extends State<StockListPage>
 
   Widget _buildActionButton() {
     return FloatingActionButton(
-      onPressed: () {
-        _addStock();
-      },
+      onPressed: _addStock,
       tooltip: I18n.of(context).text("add_stock"),
       child: Icon(Icons.add),
     );
