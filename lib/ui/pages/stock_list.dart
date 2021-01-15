@@ -112,7 +112,9 @@ class _StockListPageState extends State<StockListPage>
 
   Widget _buildActionButton() {
     return FloatingActionButton(
-      onPressed: _addStock,
+      onPressed: () {
+        _addStock();
+      },
       tooltip: I18n.of(context).text("add_stock"),
       child: Icon(Icons.add),
     );
