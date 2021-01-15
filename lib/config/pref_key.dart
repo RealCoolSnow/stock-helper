@@ -9,6 +9,7 @@ class PrefKey {
   static const String launchTime = "launch_time";
   static const String settingTrayIcon = "tray_icon";
   static const String settingStockWebSite = "stock_website";
+  static const String stockListOrder = "stock_list_order";
 }
 
 class PrefDefault {

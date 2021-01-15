@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,10 @@ import 'package:flutter_status_bar/flutter_status_bar.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/config/config.dart';
+import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
+import 'package:stock_helper/storage/Pref.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/ui/pages/stock_search.dart';
@@ -42,7 +45,7 @@ class _StockListPageState extends State<StockListPage> {
     });
   }
 
-  _loadShownStockList() {
+  _loadShownStockList({bool updateOrder = false}) {
     stockCodeString = '';
     sql.rawQuery("SELECT * FROM ${SqlTable.NAME_STOCKS} ORDER BY ID DESC",
         []).then((value) {
@@ -63,6 +66,9 @@ class _StockListPageState extends State<StockListPage> {
       });
       logUtil.d('stockCodes $stockCodeString');
       _startTimer();
+      if (updateOrder) {
+        StockUtil.saveListOrder(stocklist);
+      }
     });
   }
 
@@ -101,6 +107,7 @@ class _StockListPageState extends State<StockListPage> {
     var child = stocklist.removeAt(oldIndex);
     stocklist.insert(newIndex, child);
     setState(() {});
+    StockUtil.saveListOrder(stocklist);
   }
 
   List<Widget> _getStockList() {
@@ -217,7 +224,7 @@ class _StockListPageState extends State<StockListPage> {
         .then((value) {
       logUtil.d('showSearch result: $value');
       if (value != null) {
-        _loadShownStockList();
+        _loadShownStockList(updateOrder: true);
       }
     });
   }
@@ -232,6 +239,7 @@ class _StockListPageState extends State<StockListPage> {
         logUtil.d('delete result: $value');
         setState(() {
           stocklist.remove(stockInfo);
+          StockUtil.saveListOrder(stocklist);
         });
       }).catchError((err) {
         logUtil.d(err);

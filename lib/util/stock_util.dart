@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_basic_info.dart';
+import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
+import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/http/http_util.dart';
+import 'package:stock_helper/storage/Pref.dart';
 import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
 import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/util/dialog_util.dart';
@@ -65,6 +69,16 @@ class StockUtil {
       return completer.complete(_parseSinaData(response.data));
     });
     return completer.future;
+  }
+
+  static void saveListOrder(List<StockInfo> stocklist) {
+    List<String> list = [];
+    for (var i = 0; i < stocklist.length; i++) {
+      list.add(stocklist[i].baseInfo.code);
+    }
+    String data = json.encode(list);
+    logUtil.d('saveListOrder $data');
+    Pref.setString(PrefKey.stockListOrder, data);
   }
 
   static Map<String, StockPrice> _parseSinaData(String data) {
