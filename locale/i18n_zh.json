@@ -11,6 +11,7 @@
   "delete": "删除",
   "cancel": "取消",
   "show_tray": "托盘显示",
+  "show_tray_tip": "展示列表前三股票价格",
   "stock_website": "行情网站",
   "sina": "新浪",
   "xueqiu": "雪球",

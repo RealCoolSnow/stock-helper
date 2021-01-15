@@ -36,6 +36,7 @@ class _SettingPageState extends State<SettingPage> {
             tiles: [
               SettingsTile.switchTile(
                 title: I18n.of(context).text('show_tray'),
+                subtitle: I18n.of(context).text('show_tray_tip'),
                 leading: Icon(Icons.notifications),
                 switchValue: _settingTrayIcon,
                 switchActiveColor: AppTheme.secondary,

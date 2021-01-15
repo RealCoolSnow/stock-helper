@@ -8,7 +8,7 @@
 PRODUCT_NAME = stock_helper
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.stockHelper
+PRODUCT_BUNDLE_IDENTIFIER = com.coolsnow.stockHelper
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2021 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2021 CoolSnow. All rights reserved.
