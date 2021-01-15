@@ -89,10 +89,18 @@ class _StockListPageState extends State<StockListPage> {
         body: stocklist.isNotEmpty
             ? ReorderableListView(
                 children: this._getStockList(),
-                onReorder: (int oldIndex, int newIndex) {
-                  logUtil.d("$oldIndex --- $newIndex");
-                })
+                onReorder: (int oldIndex, int newIndex) =>
+                    _updateListOrder(oldIndex, newIndex))
             : Center(child: Text(I18n.of(context).text("add_stock_tip"))));
+  }
+
+  void _updateListOrder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    var child = stocklist.removeAt(oldIndex);
+    stocklist.insert(newIndex, child);
+    setState(() {});
   }
 
   List<Widget> _getStockList() {
