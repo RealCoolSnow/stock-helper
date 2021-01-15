@@ -39,6 +39,7 @@ class _StockListPageState extends State<StockListPage> {
     Future.delayed(Duration.zero, () {
       TrayUtil.refreshState(I18n.of(context).text('app_name'));
     });
+    _startTimer();
   }
 
   _loadShownStockList() {
@@ -63,7 +64,6 @@ class _StockListPageState extends State<StockListPage> {
             stocklist = list;
           });
           logUtil.d('stockCodes $stockCodeString');
-          _startTimer();
         }
       }
     });
@@ -240,7 +240,8 @@ class _StockListPageState extends State<StockListPage> {
       Navigator.pop(context);
       setState(() {
         stocklist.remove(stockInfo);
-        stockCodeString = stockCodeString.replaceAll('${stockInfo.baseInfo.code},', '');
+        stockCodeString =
+            stockCodeString.replaceAll('${stockInfo.baseInfo.code},', '');
         StockUtil.saveListOrder(stocklist);
       });
     });
