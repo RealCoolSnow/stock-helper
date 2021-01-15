@@ -9,4 +9,7 @@ class StockInfo {
   StockInfo.baseInfoFromJson(Map<String, dynamic> json) {
     baseInfo = StockBasicInfo.fromJson(json);
   }
+  StockInfo.baseInfo(StockBasicInfo info) {
+    baseInfo = info;
+  }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_basic_info.dart';
-import 'package:stock_helper/util/log_util.dart';
+import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/util/stock_util.dart';
 
-class StockSearchDelegate extends SearchDelegate<StockBasicInfo> {
+class StockSearchDelegate extends SearchDelegate<StockInfo> {
   BuildContext _context;
   StockSearchDelegate({
     String hintText,
@@ -74,12 +74,7 @@ class StockSearchDelegate extends SearchDelegate<StockBasicInfo> {
       title: Text(stockItem.name),
       subtitle: Text(stockItem.code),
       onTap: () {
-        logUtil.d(stockItem.toJson());
-        StockUtil.addStock(stockItem)
-            .then((value) => close(_context, stockItem))
-            .catchError((e) {
-          close(_context, null);
-        });
+        close(_context, StockInfo.baseInfo(stockItem));
       },
     );
   }

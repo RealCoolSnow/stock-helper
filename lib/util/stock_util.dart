@@ -8,8 +8,6 @@ import 'package:stock_helper/bean/stock_price.dart';
 import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/http/http_util.dart';
 import 'package:stock_helper/storage/Pref.dart';
-import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
-import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/log_util.dart';
 
@@ -50,18 +48,6 @@ class StockUtil {
     return list;
   }
 
-  static Future<bool> addStock(StockBasicInfo stockItem) async {
-    var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
-    var conditions = {'code': stockItem.code};
-    var result = await sql.query(conditions: conditions);
-    if (result == null || result.isEmpty) {
-      var item = {'code': stockItem.code, 'name': stockItem.name};
-      var id = await sql.insert(item);
-      return id > 0;
-    }
-    return false;
-  }
-
   static Future<Map<String, StockPrice>> updateStockPrice(String codes) {
     Completer<Map<String, StockPrice>> completer = Completer();
     String url = API_STOCK + codes;
@@ -71,14 +57,17 @@ class StockUtil {
     return completer.future;
   }
 
-  static void saveListOrder(List<StockInfo> stocklist) {
-    List<String> list = [];
+  static Future<bool> saveListOrder(List<StockInfo> stocklist) {
+    Completer<bool> completer = Completer();
+    List<StockBasicInfo> list = [];
     for (var i = 0; i < stocklist.length; i++) {
-      list.add(stocklist[i].baseInfo.code);
+      list.add(stocklist[i].baseInfo);
     }
     String data = json.encode(list);
     logUtil.d('saveListOrder $data');
-    Pref.setString(PrefKey.stockListOrder, data);
+    Pref.setString(PrefKey.stockListOrder, data)
+        .then((value) => completer.complete(true));
+    return completer.future;
   }
 
   static Map<String, StockPrice> _parseSinaData(String data) {

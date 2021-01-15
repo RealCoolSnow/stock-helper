@@ -25,8 +25,8 @@ class _AppState extends State<App> {
     Config.router = router;
     //---shared preferences
     Pref.setString(PrefKey.launchTime, TimeUtil.format(DateTime.now()));
-    //---sqflite
-    Provider().init();
+    // //---sqflite
+    // Provider().init();
     //---logutil
     logUtil.setEnabled(Config.debug);
     Pref.getString(PrefKey.launchTime, "")

@@ -11,8 +11,6 @@ import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/config/route/routes.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/Pref.dart';
-import 'package:stock_helper/storage/sqflite/sql_table_data.dart';
-import 'package:stock_helper/storage/sqflite/sql_util.dart';
 import 'package:stock_helper/ui/pages/stock_search.dart';
 import 'package:stock_helper/util/dialog_util.dart';
 import 'package:stock_helper/util/format_util.dart';
@@ -27,7 +25,6 @@ class StockListPage extends StatefulWidget {
 }
 
 class _StockListPageState extends State<StockListPage> {
-  var sql;
   List<StockInfo> stocklist = [];
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
@@ -35,7 +32,6 @@ class _StockListPageState extends State<StockListPage> {
   @override
   void initState() {
     super.initState();
-    sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
     //---load all stocks
     StockUtil.loadAllStocks(context);
     _loadShownStockList();
@@ -45,29 +41,30 @@ class _StockListPageState extends State<StockListPage> {
     });
   }
 
-  _loadShownStockList({bool updateOrder = false}) {
+  _loadShownStockList() {
     stockCodeString = '';
-    sql.rawQuery("SELECT * FROM ${SqlTable.NAME_STOCKS} ORDER BY ID DESC",
-        []).then((value) {
-      logUtil.d(value);
-      var list = value
-          .map((item) {
-            stockCodeString += item['code'] + ',';
-            StockInfo stockInfo = StockInfo.baseInfoFromJson(item);
-            if (stockPriceMap.containsKey(item['code'])) {
-              stockInfo.priceInfo = stockPriceMap[item['code']];
-            }
-            return stockInfo;
-          })
-          .toList()
-          .cast<StockInfo>();
-      setState(() {
-        stocklist = list;
-      });
-      logUtil.d('stockCodes $stockCodeString');
-      _startTimer();
-      if (updateOrder) {
-        StockUtil.saveListOrder(stocklist);
+    Pref.getString(PrefKey.stockListOrder, "").then((data) {
+      if (data != null && data.isNotEmpty) {
+        List listJson = json.decode(data);
+        if (listJson != null && listJson.isNotEmpty) {
+          var list = listJson
+              .map((item) {
+                stockCodeString += item['code'] + ',';
+                StockInfo stockInfo = StockInfo.baseInfoFromJson(item);
+                if (stockPriceMap.containsKey(item['code'])) {
+                  stockInfo.priceInfo = stockPriceMap[item['code']];
+                }
+                return stockInfo;
+              })
+              .toList()
+              .cast<StockInfo>();
+          ;
+          setState(() {
+            stocklist = list;
+          });
+          logUtil.d('stockCodes $stockCodeString');
+          _startTimer();
+        }
       }
     });
   }
@@ -221,10 +218,16 @@ class _StockListPageState extends State<StockListPage> {
             context: context,
             delegate: StockSearchDelegate(
                 hintText: I18n.of(context).text('search_tip')))
-        .then((value) {
-      logUtil.d('showSearch result: $value');
-      if (value != null) {
-        _loadShownStockList(updateOrder: true);
+        .then((stockInfo) {
+      logUtil.d('showSearch result: $stockInfo');
+      if (stockInfo != null) {
+        setState(() {
+          if (!stockCodeString.contains(stockInfo.baseInfo.code)) {
+            stocklist.insert(0, stockInfo);
+            stockCodeString = '${stockInfo.baseInfo.code},$stockCodeString';
+            StockUtil.saveListOrder(stocklist);
+          }
+        });
       }
     });
   }
@@ -235,14 +238,10 @@ class _StockListPageState extends State<StockListPage> {
         negativeText: I18n.of(context).text('cancel'),
         positiveText: I18n.of(context).text('delete'), positiveCallback: () {
       Navigator.pop(context);
-      sql.delete('id', stockInfo.baseInfo.id).then((value) {
-        logUtil.d('delete result: $value');
-        setState(() {
-          stocklist.remove(stockInfo);
-          StockUtil.saveListOrder(stocklist);
-        });
-      }).catchError((err) {
-        logUtil.d(err);
+      setState(() {
+        stocklist.remove(stockInfo);
+        stockCodeString = stockCodeString.replaceAll('${stockInfo.baseInfo.code},', '');
+        StockUtil.saveListOrder(stocklist);
       });
     });
   }
@@ -252,6 +251,9 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _updateStockInfo() {
+    if (stocklist.isEmpty || stockCodeString.isEmpty) {
+      return;
+    }
     StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
       if (pricesMap != null && pricesMap.isNotEmpty) {
         setState(() {
@@ -284,22 +286,6 @@ class _StockListPageState extends State<StockListPage> {
         FlutterStatusBar.setStatusBarText(text);
       }
     });
-  }
-
-  void _testDatabase() {
-    var sql = SqlUtil.setTable(SqlTable.NAME_STOCKS);
-    //插入
-    // var map = {'code': '601360', 'name': '三六零'};
-    // sql.insert(map).then((id) {
-    //   logUtil.d('insert $id');
-    // });
-    //删除
-    sql.delete('id', 1);
-    //查询
-    var conditions = {};
-    sql
-        .query(conditions: conditions)
-        .then((value) => logUtil.d('result $value'));
   }
 
   void _startTimer() {
