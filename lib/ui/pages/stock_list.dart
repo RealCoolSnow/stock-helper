@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_status_bar/flutter_status_bar.dart';
 import 'package:stock_helper/bean/stock_info.dart';
@@ -86,9 +87,11 @@ class _StockListPageState extends State<StockListPage> {
         ),
         floatingActionButton: _buildActionButton(),
         body: stocklist.isNotEmpty
-            ? ListView(
+            ? ReorderableListView(
                 children: this._getStockList(),
-              )
+                onReorder: (int oldIndex, int newIndex) {
+                  logUtil.d("$oldIndex --- $newIndex");
+                })
             : Center(child: Text(I18n.of(context).text("add_stock_tip"))));
   }
 
@@ -112,9 +115,15 @@ class _StockListPageState extends State<StockListPage> {
             stockInfo.priceInfo.yesterdayClose *
             100);
     return ListTile(
+      key: ValueKey(stockInfo.baseInfo.code),
       dense: true,
-      onTap: () => _showStock(stockInfo),
-      onLongPress: () => _delStock(stockInfo),
+      onTap: () {
+        showCupertinoModalPopup(
+          context: context,
+          builder: (BuildContext context) => _showActionSheet(stockInfo),
+        ).then((value) {});
+      },
+      // onLongPress: () => _delStock(stockInfo),
       title: Text(stockInfo.baseInfo.name),
       subtitle: Text(stockInfo.baseInfo.code),
       trailing: Container(
@@ -141,6 +150,50 @@ class _StockListPageState extends State<StockListPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
         ),
+      ),
+    );
+  }
+
+  Widget _showActionSheet(StockInfo stockInfo) {
+    return CupertinoActionSheet(
+      title: Text(
+        stockInfo.baseInfo.name,
+      ),
+      actions: <Widget>[
+        CupertinoActionSheetAction(
+          child: Text(
+            I18n.of(context).text('view'),
+            style: TextStyle(
+              fontSize: 14.0,
+            ),
+          ),
+          onPressed: () {
+            _showStock(stockInfo);
+          },
+        ),
+        CupertinoActionSheetAction(
+          child: Text(
+            I18n.of(context).text('delete'),
+            style: TextStyle(
+              fontSize: 14.0,
+            ),
+          ),
+          onPressed: () {
+            _delStock(stockInfo);
+          },
+        )
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        child: new Text(
+          I18n.of(context).text('cancel'),
+          style: TextStyle(
+            fontSize: 13.0,
+            color: const Color(0xFF666666),
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
