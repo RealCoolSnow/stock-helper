@@ -168,6 +168,7 @@ class _StockListPageState extends State<StockListPage> {
             ),
           ),
           onPressed: () {
+            Navigator.pop(context);
             _showStock(stockInfo);
           },
         ),
@@ -179,6 +180,7 @@ class _StockListPageState extends State<StockListPage> {
             ),
           ),
           onPressed: () {
+            Navigator.pop(context);
             _delStock(stockInfo);
           },
         )
