@@ -18,6 +18,7 @@ import 'package:stock_helper/util/log_util.dart';
 import 'package:stock_helper/util/stock_util.dart';
 import 'package:stock_helper/util/stock_website.dart';
 import 'package:stock_helper/util/tray_util.dart';
+import 'package:stock_helper/util/update_util.dart';
 
 class StockListPage extends StatefulWidget {
   @override
@@ -34,6 +35,8 @@ class _StockListPageState extends State<StockListPage> {
     super.initState();
     //---load all stocks
     StockUtil.loadAllStocks(context);
+    //---check update
+    UpdateUtil.checkUpdate(context);
     _loadShownStockList();
     //---tray icon
     Future.delayed(Duration.zero, () {
