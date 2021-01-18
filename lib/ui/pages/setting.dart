@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/pref_key.dart';
@@ -18,12 +19,16 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   bool _settingTrayIcon = PrefDefault.settingTrayIcon;
   String _stockWebSite = '';
+  String _version = '';
   _SettingPageState() {
     Pref.getBool(PrefKey.settingTrayIcon, PrefDefault.settingTrayIcon)
         .then((value) {
       _settingTrayIcon = value;
     });
     _updateStockWebSite();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      _version = packageInfo.version;
+    });
   }
 
   @override
@@ -64,6 +69,18 @@ class _SettingPageState extends State<SettingPage> {
                     _updateStockWebSite();
                   });
                 },
+              ),
+              SettingsTile(
+                title: I18n.of(context).text('contant_author'),
+                subtitle: "CoolSnow<670696652@qq.com>",
+                leading: Icon(Icons.contact_mail),
+                onPressed: (BuildContext context) {},
+              ),
+              SettingsTile(
+                title: I18n.of(context).text('version'),
+                subtitle: _version,
+                leading: Icon(Icons.verified),
+                onPressed: (BuildContext context) {},
               ),
             ],
           ),
