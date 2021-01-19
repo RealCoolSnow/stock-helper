@@ -30,6 +30,7 @@ class _StockListPageState extends State<StockListPage> {
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
   bool timerRunning = false;
+  bool requesting = false;
   @override
   void initState() {
     super.initState();
@@ -255,10 +256,12 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _updateStockInfo() {
-    if (stocklist.isEmpty || stockCodeString.isEmpty) {
+    if (requesting || stocklist.isEmpty || stockCodeString.isEmpty) {
       return;
     }
+    requesting = true;
     StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
+      requesting = false;
       if (pricesMap != null && pricesMap.isNotEmpty) {
         setState(() {
           for (int i = 0; i < stocklist.length; i++) {

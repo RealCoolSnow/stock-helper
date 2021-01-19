@@ -52,7 +52,9 @@ class StockUtil {
     Completer<Map<String, StockPrice>> completer = Completer();
     String url = API_STOCK + codes;
     HttpUtil().getDio().get(url).then((response) {
-      return completer.complete(_parseSinaData(response.data));
+      completer.complete(_parseSinaData(response.data));
+    }).catchError((error) {
+      completer.complete(null);
     });
     return completer.future;
   }
