@@ -16,6 +16,7 @@ class UpdateUtil {
           DialogUtil.showMessage(
               context, '发现新版本v${data['vname']}', data['hint'],
               positiveText: '更新', negativeText: '暂不', positiveCallback: () {
+            Navigator.pop(context, 0);
             CommonUtil.launchURL(data['url']);
           });
         }
