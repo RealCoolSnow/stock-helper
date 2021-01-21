@@ -30,7 +30,6 @@ class _StockListPageState extends State<StockListPage> {
   Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
   bool timerRunning = false;
-  bool requesting = false;
   @override
   void initState() {
     super.initState();
@@ -256,24 +255,24 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _updateStockInfo() {
-    if (requesting || stocklist.isEmpty || stockCodeString.isEmpty) {
-      return;
-    }
-    requesting = true;
-    StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
-      requesting = false;
-      if (pricesMap != null && pricesMap.isNotEmpty) {
-        setState(() {
-          for (int i = 0; i < stocklist.length; i++) {
-            if (pricesMap.containsKey(stocklist[i].baseInfo.code)) {
-              stocklist[i].priceInfo = pricesMap[stocklist[i].baseInfo.code];
+    if (stocklist.isEmpty || stockCodeString.isEmpty) {
+      _onTimer();
+    } else {
+      StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
+        if (pricesMap != null && pricesMap.isNotEmpty) {
+          setState(() {
+            for (int i = 0; i < stocklist.length; i++) {
+              if (pricesMap.containsKey(stocklist[i].baseInfo.code)) {
+                stocklist[i].priceInfo = pricesMap[stocklist[i].baseInfo.code];
+              }
             }
-          }
-          stockPriceMap = pricesMap;
-        });
-        _updateStatusBar();
-      }
-    });
+            stockPriceMap = pricesMap;
+          });
+          _updateStatusBar();
+        }
+        _onTimer();
+      });
+    }
   }
 
   void _updateStatusBar() {
@@ -299,14 +298,21 @@ class _StockListPageState extends State<StockListPage> {
     if (!timerRunning) {
       timerRunning = true;
       _updateStockInfo();
-      Timer.periodic(Duration(milliseconds: Config.stockTimerDuration),
-          (timer) {
-        if (!timerRunning) {
-          timer.cancel();
-        } else {
-          _updateStockInfo();
-        }
-      });
+      // Timer.periodic(Duration(milliseconds: Config.stockTimerDuration),
+      //     (timer) {
+      //   if (!timerRunning) {
+      //     timer.cancel();
+      //   } else {
+      //     _updateStockInfo();
+      //   }
+      // });
+    }
+  }
+
+  void _onTimer() {
+    if (timerRunning) {
+      Future.delayed(
+          Duration(milliseconds: Config.stockTimerDuration), _updateStockInfo);
     }
   }
 
