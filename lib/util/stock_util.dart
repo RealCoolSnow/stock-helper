@@ -82,9 +82,13 @@ class StockUtil {
           StockPrice stockPrice = StockPrice();
           List<String> priceArray = stockArray[i].split(',');
           if (priceArray[0].length > 20) {
-            stockPrice.loadSinaData(priceArray);
             String code =
                 RegExp(r"(?<=hq_str_).*(?==)").stringMatch(priceArray[0]);
+            if (code.startsWith('hk')) {
+              stockPrice.loadHKData(priceArray);
+            } else {
+              stockPrice.loadSinaData(priceArray);
+            }
             priceMap[code] = stockPrice;
           }
         }

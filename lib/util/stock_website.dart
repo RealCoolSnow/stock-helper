@@ -29,10 +29,14 @@ class StockWebSiteUtil {
         url = 'https://finance.sina.com.cn/realstock/company/$code/nc.shtml';
         break;
       case StockWebSite.XueQiu:
+        code =
+            code.startsWith('hk') ? code.replaceAll(RegExp(r'hk'), '') : code;
         url = 'https://xueqiu.com/S/$code';
         break;
       case StockWebSite.TongHuaShun:
-        code = code.replaceAll(RegExp(r'sh|sz'), '');
+        code = code.startsWith('hk')
+            ? code.toUpperCase()
+            : code.replaceAll(RegExp(r'sh|sz'), '');
         url = 'http://stockpage.10jqka.com.cn/$code/';
         break;
     }

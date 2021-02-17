@@ -1,5 +1,3 @@
-import 'package:stock_helper/util/log_util.dart';
-
 class StockPrice {
   double open = 0; //1-今日开盘价
   double yesterdayClose = 0; //2-昨日收盘价
@@ -69,6 +67,47 @@ class StockPrice {
       sellPrice5 = double.parse(data[29]);
       date = data[30];
       time = data[31];
+    }
+  }
+
+  /**
+   * 港股信息
+   * 
+   * http://hq.sinajs.cn/list=hk00001
+var hq_str_hk00001="CHEUNG KONG,长和,90.300,91.050,91.050,90.000,90.750,-0.300,-0.329,90.650,90.750,627798876,6932826,2.954,2.810,118.800,87.600,2016/06/22,16:01";
+
+temp[0]------CHEUNG KONG------名称
+temp[1]------长和------股票名称
+temp[2]------90.300------今日开盘价
+temp[3]------91.050------昨日收盘价
+temp[4]------91.050------最高价
+temp[5]------90.000------最低价
+temp[6]------90.750------当前价（现价）
+temp[7]------ -0.300------涨跌
+temp[8]------ -0.329------涨幅
+temp[9]------90.650------买一
+temp[10]------90.750------卖一
+temp[11]------627798876------成交额
+temp[12]------6932826------成交量
+temp[13]------2.954------市盈率
+temp[14]------2.810------周息率（2.810%）
+temp[15]------118.800------52周最高
+temp[16]------87.600------52周最低
+temp[17]------2016/06/22------日期
+temp[18]------16:01------时间
+   */
+  void loadHKData(List<String> data) {
+    if (data.isNotEmpty && data.length > 18) {
+      open = double.parse(data[2]); //今日开盘价
+      yesterdayClose = double.parse(data[3]); //昨日收盘价
+      high = double.parse(data[4]); //最高价
+      low = double.parse(data[5]); //最低价
+      price = double.parse(data[6]); //当前价（现价）
+      priceStr = price.toStringAsFixed(2);
+      buyPrice1 = double.parse(data[9]); //买一
+      sellPrice1 = double.parse(data[10]); //卖一
+      date = data[17];
+      time = data[18];
     }
   }
 }
