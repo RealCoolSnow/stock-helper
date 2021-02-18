@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,9 @@ class _StockListPageState extends State<StockListPage> {
     //---load all stocks
     StockUtil.loadAllStocks(context);
     //---check update
-    UpdateUtil.checkUpdate(context);
+    if (!Platform.isWindows) {
+      UpdateUtil.checkUpdate(context);
+    }
     _loadShownStockList();
     //---tray icon
     Future.delayed(Duration.zero, () {
