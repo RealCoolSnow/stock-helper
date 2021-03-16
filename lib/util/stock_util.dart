@@ -14,6 +14,7 @@ import 'package:stock_helper/util/log_util.dart';
 ///
 class StockUtil {
   static const String API_STOCK = 'https://hq.sinajs.cn/list=';
+  static const String API_STOCK_TX = 'https://qt.gtimg.cn/q=';
   static List<StockBasicInfo> stockList = [];
   //
   static void loadAllStocks(BuildContext context) {
@@ -59,6 +60,17 @@ class StockUtil {
     return completer.future;
   }
 
+  static Future<Map<String, StockPrice>> updateStockPriceTX(String codes) {
+    Completer<Map<String, StockPrice>> completer = Completer();
+    String url = API_STOCK_TX + codes;
+    HttpUtil().getDio().get(url).then((response) {
+      completer.complete(_parseTXData(response.data));
+    }).catchError((error) {
+      completer.complete(null);
+    });
+    return completer.future;
+  }
+
   static Future<bool> saveListOrder(List<StockInfo> stocklist) {
     Completer<bool> completer = Completer();
     List<StockBasicInfo> list = [];
@@ -84,6 +96,30 @@ class StockUtil {
           if (priceArray[0].length > 20) {
             String code =
                 RegExp(r"(?<=hq_str_).*(?==)").stringMatch(priceArray[0]);
+            if (code.startsWith('hk')) {
+              stockPrice.loadHKData(priceArray);
+            } else {
+              stockPrice.loadSinaData(priceArray);
+            }
+            priceMap[code] = stockPrice;
+          }
+        }
+      }
+    }
+    return priceMap;
+  }
+
+  static Map<String, StockPrice> _parseTXData(String data) {
+    logUtil.d("_parseTXData : $data");
+    Map<String, StockPrice> priceMap = {};
+    if (data != null && data.isNotEmpty) {
+      List<String> stockArray = data.trim().split(';');
+      if (stockArray.isNotEmpty) {
+        for (int i = 0; i < stockArray.length; ++i) {
+          StockPrice stockPrice = StockPrice();
+          List<String> priceArray = stockArray[i].split('~');
+          if (priceArray[0].length > 20) {
+            String code = RegExp(r"(?<=v_).*(?==)").stringMatch(priceArray[0]);
             if (code.startsWith('hk')) {
               stockPrice.loadHKData(priceArray);
             } else {
