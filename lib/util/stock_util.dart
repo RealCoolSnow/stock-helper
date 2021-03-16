@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:stock_helper/bean/stock_basic_info.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price.dart';
+import 'package:stock_helper/bean/stock_price_tx.dart';
 import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/http/http_util.dart';
 import 'package:stock_helper/storage/Pref.dart';
@@ -60,8 +61,8 @@ class StockUtil {
     return completer.future;
   }
 
-  static Future<Map<String, StockPrice>> updateStockPriceTX(String codes) {
-    Completer<Map<String, StockPrice>> completer = Completer();
+  static Future<Map<String, StockPriceTX>> updateStockPriceTX(String codes) {
+    Completer<Map<String, StockPriceTX>> completer = Completer();
     String url = API_STOCK_TX + codes;
     HttpUtil().getDio().get(url).then((response) {
       completer.complete(_parseTXData(response.data));
@@ -109,22 +110,18 @@ class StockUtil {
     return priceMap;
   }
 
-  static Map<String, StockPrice> _parseTXData(String data) {
+  static Map<String, StockPriceTX> _parseTXData(String data) {
     logUtil.d("_parseTXData : $data");
-    Map<String, StockPrice> priceMap = {};
+    Map<String, StockPriceTX> priceMap = {};
     if (data != null && data.isNotEmpty) {
       List<String> stockArray = data.trim().split(';');
       if (stockArray.isNotEmpty) {
         for (int i = 0; i < stockArray.length; ++i) {
-          StockPrice stockPrice = StockPrice();
+          StockPriceTX stockPrice = StockPriceTX();
           List<String> priceArray = stockArray[i].split('~');
-          if (priceArray[0].length > 20) {
+          if (priceArray[0].length > 10) {
             String code = RegExp(r"(?<=v_).*(?==)").stringMatch(priceArray[0]);
-            if (code.startsWith('hk')) {
-              stockPrice.loadHKData(priceArray);
-            } else {
-              stockPrice.loadSinaData(priceArray);
-            }
+            stockPrice.loadData(priceArray);
             priceMap[code] = stockPrice;
           }
         }

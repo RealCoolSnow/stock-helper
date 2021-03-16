@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_status_bar/flutter_status_bar.dart';
 import 'package:stock_helper/bean/stock_info.dart';
-import 'package:stock_helper/bean/stock_price.dart';
+import 'package:stock_helper/bean/stock_price_tx.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/config/route/routes.dart';
@@ -28,7 +28,7 @@ class StockListPage extends StatefulWidget {
 
 class _StockListPageState extends State<StockListPage> {
   List<StockInfo> stocklist = [];
-  Map<String, StockPrice> stockPriceMap = {}; //缓存价格信息
+  Map<String, StockPriceTX> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
   bool timerRunning = false;
   @override
@@ -261,7 +261,7 @@ class _StockListPageState extends State<StockListPage> {
     if (stocklist.isEmpty || stockCodeString.isEmpty) {
       _onTimer();
     } else {
-      StockUtil.updateStockPrice(stockCodeString).then((pricesMap) {
+      StockUtil.updateStockPriceTX(stockCodeString).then((pricesMap) {
         if (pricesMap != null && pricesMap.isNotEmpty) {
           setState(() {
             for (int i = 0; i < stocklist.length; i++) {
