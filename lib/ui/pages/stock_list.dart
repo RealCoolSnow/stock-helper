@@ -31,6 +31,7 @@ class _StockListPageState extends State<StockListPage> {
   Map<String, StockPriceTX> stockPriceMap = {}; //缓存价格信息
   String stockCodeString = ''; //股票代码列表
   bool timerRunning = false;
+  bool isWindows = false;
   @override
   void initState() {
     super.initState();
@@ -77,6 +78,7 @@ class _StockListPageState extends State<StockListPage> {
 
   @override
   Widget build(BuildContext context) {
+    isWindows = Theme.of(context).platform == TargetPlatform.windows;
     return Scaffold(
         appBar: new AppBar(
           title: new Text(I18n.of(context).text("app_name")),
@@ -128,10 +130,7 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   Widget _buildStockItem(StockInfo stockInfo) {
-    String percent = FormatUtil.get2FixedNumber(
-        (stockInfo.priceInfo.price - stockInfo.priceInfo.yesterdayClose) /
-            stockInfo.priceInfo.yesterdayClose *
-            100);
+    String percent = FormatUtil.get2FixedNumber(stockInfo.priceInfo.rise_p);
     return ListTile(
       key: ValueKey(stockInfo.baseInfo.code),
       dense: true,
@@ -147,24 +146,44 @@ class _StockListPageState extends State<StockListPage> {
       trailing: Container(
         width: 200,
         child: Row(
-          children: [
-            Text(
-              '${stockInfo.priceInfo.priceStr}',
-              style: TextStyle(
-                  color: stockInfo.priceInfo.price >
-                          stockInfo.priceInfo.yesterdayClose
-                      ? Colors.red
-                      : Colors.green),
-            ),
-            Text(
-              '$percent%',
-              style: TextStyle(
-                  color: stockInfo.priceInfo.price >
-                          stockInfo.priceInfo.yesterdayClose
-                      ? Colors.red
-                      : Colors.green),
-            ),
-          ],
+          children: isWindows
+              ? [
+                  Text(
+                    '${stockInfo.priceInfo.priceStr}',
+                    style: TextStyle(
+                        color: stockInfo.priceInfo.price >
+                                stockInfo.priceInfo.yesterdayClose
+                            ? Colors.red
+                            : Colors.green),
+                  ),
+                  Text(
+                    '$percent%',
+                    style: TextStyle(
+                        color: stockInfo.priceInfo.price >
+                                stockInfo.priceInfo.yesterdayClose
+                            ? Colors.red
+                            : Colors.green),
+                  ),
+                  Text("")
+                ]
+              : [
+                  Text(
+                    '${stockInfo.priceInfo.priceStr}',
+                    style: TextStyle(
+                        color: stockInfo.priceInfo.price >
+                                stockInfo.priceInfo.yesterdayClose
+                            ? Colors.red
+                            : Colors.green),
+                  ),
+                  Text(
+                    '$percent%',
+                    style: TextStyle(
+                        color: stockInfo.priceInfo.price >
+                                stockInfo.priceInfo.yesterdayClose
+                            ? Colors.red
+                            : Colors.green),
+                  ),
+                ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
         ),
