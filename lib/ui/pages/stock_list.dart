@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_status_bar/flutter_status_bar.dart';
 import 'package:stock_helper/bean/stock_info.dart';
 import 'package:stock_helper/bean/stock_price_tx.dart';
@@ -130,64 +131,79 @@ class _StockListPageState extends State<StockListPage> {
 
   Widget _buildStockItem(StockInfo stockInfo) {
     String percent = FormatUtil.get2FixedNumber(stockInfo.priceInfo.rise_p);
-    return ListTile(
-      key: ValueKey(stockInfo.baseInfo.code),
-      dense: true,
-      onTap: () {
-        showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext context) => _showActionSheet(stockInfo),
-        ).then((value) {});
-      },
-      // onLongPress: () => _delStock(stockInfo),
-      title: Text(stockInfo.baseInfo.name),
-      subtitle: Text(stockInfo.baseInfo.code),
-      trailing: Container(
-        width: 200,
-        child: Row(
-          children: isWindows
-              ? [
-                  Text(
-                    '${stockInfo.priceInfo.priceStr}',
-                    style: TextStyle(
-                        color: stockInfo.priceInfo.price >
-                                stockInfo.priceInfo.yesterdayClose
-                            ? Colors.red
-                            : Colors.green),
-                  ),
-                  Text(
-                    '$percent%',
-                    style: TextStyle(
-                        color: stockInfo.priceInfo.price >
-                                stockInfo.priceInfo.yesterdayClose
-                            ? Colors.red
-                            : Colors.green),
-                  ),
-                  Text("")
-                ]
-              : [
-                  Text(
-                    '${stockInfo.priceInfo.priceStr}',
-                    style: TextStyle(
-                        color: stockInfo.priceInfo.price >
-                                stockInfo.priceInfo.yesterdayClose
-                            ? Colors.red
-                            : Colors.green),
-                  ),
-                  Text(
-                    '$percent%',
-                    style: TextStyle(
-                        color: stockInfo.priceInfo.price >
-                                stockInfo.priceInfo.yesterdayClose
-                            ? Colors.red
-                            : Colors.green),
-                  ),
-                ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-        ),
-      ),
-    );
+    return Slidable(
+        key: ValueKey(stockInfo.baseInfo.code),
+        actionPane: SlidableDrawerActionPane(),
+        actionExtentRatio: 0.25,
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: I18n.of(context).text('delete'),
+            color: Colors.redAccent,
+            icon: Icons.delete_forever,
+            onTap: () => _delStock(stockInfo),
+          ),
+        ],
+        child: Container(
+          color: Colors.white,
+          child: ListTile(
+            key: ValueKey(stockInfo.baseInfo.code),
+            dense: true,
+            onTap: () {
+              _showStock(stockInfo);
+              // showCupertinoModalPopup(
+              //   context: context,
+              //   builder: (BuildContext context) => _showActionSheet(stockInfo),
+              // ).then((value) {});
+            },
+            // onLongPress: () => _delStock(stockInfo),
+            title: Text(stockInfo.baseInfo.name),
+            subtitle: Text(stockInfo.baseInfo.code),
+            trailing: Container(
+                width: 200,
+                child: Row(
+                  children: isWindows
+                      ? [
+                          Text(
+                            '${stockInfo.priceInfo.priceStr}',
+                            style: TextStyle(
+                                color: stockInfo.priceInfo.price >
+                                        stockInfo.priceInfo.yesterdayClose
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                          Text(
+                            '$percent%',
+                            style: TextStyle(
+                                color: stockInfo.priceInfo.price >
+                                        stockInfo.priceInfo.yesterdayClose
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                          Text("")
+                        ]
+                      : [
+                          Text(
+                            '${stockInfo.priceInfo.priceStr}',
+                            style: TextStyle(
+                                color: stockInfo.priceInfo.price >
+                                        stockInfo.priceInfo.yesterdayClose
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                          Text(
+                            '$percent%',
+                            style: TextStyle(
+                                color: stockInfo.priceInfo.price >
+                                        stockInfo.priceInfo.yesterdayClose
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                        ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                )),
+          ),
+        ));
   }
 
   Widget _showActionSheet(StockInfo stockInfo) {

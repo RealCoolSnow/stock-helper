@@ -52,7 +52,9 @@ dependencies:
     git:
       url: https://github.com/RealCoolSnow/flutter_status_bar_plugin.git
       path: flutter_status_bar
-
+  # https://pub.flutter-io.cn/packages/flutter_slidable
+  flutter_slidable: ^0.5.7
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
