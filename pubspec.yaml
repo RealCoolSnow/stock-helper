@@ -45,7 +45,9 @@ dependencies:
   url_launcher: ^5.7.10
   # https://pub.flutter-io.cn/packages/settings_ui
   settings_ui: ^0.5.0
-  package_info: ^0.4.3+2
+  # https://pub.flutter-io.cn/packages/package_info
+  package_info: ^2.0.0
+
   flutter_status_bar:
     git:
       url: https://github.com/RealCoolSnow/flutter_status_bar_plugin.git

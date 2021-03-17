@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
@@ -26,9 +28,13 @@ class _SettingPageState extends State<SettingPage> {
       _settingTrayIcon = value;
     });
     _updateStockWebSite();
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      _version = packageInfo.version;
-    });
+    if (Platform.isWindows) {
+      _version = Config.version;
+    } else {
+      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+        _version = packageInfo.version;
+      });
+    }
   }
 
   @override

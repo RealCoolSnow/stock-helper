@@ -66,7 +66,6 @@ class _StockListPageState extends State<StockListPage> {
               })
               .toList()
               .cast<StockInfo>();
-          ;
           setState(() {
             stocklist = list;
           });
