@@ -7,6 +7,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:stock_helper/config/config.dart';
 import 'package:stock_helper/config/pref_key.dart';
 import 'package:stock_helper/config/route/routes.dart';
+import 'package:stock_helper/util/common_util.dart';
 import 'package:stock_helper/util/stock_website.dart';
 import 'package:stock_helper/locale/i18n.dart';
 import 'package:stock_helper/storage/Pref.dart';
@@ -78,9 +79,11 @@ class _SettingPageState extends State<SettingPage> {
               ),
               SettingsTile(
                 title: I18n.of(context).text('contant_author'),
-                subtitle: "CoolSnow<670696652@qq.com>",
+                subtitle: "CoolSnow<670696652@qq.com>\nweibo.com/coolsnow0927",
                 leading: Icon(Icons.contact_mail),
-                onPressed: (BuildContext context) {},
+                onPressed: (BuildContext context) {
+                  CommonUtil.launchURL("https://weibo.com/670696652");
+                },
               ),
               SettingsTile(
                 title: I18n.of(context).text('version'),
